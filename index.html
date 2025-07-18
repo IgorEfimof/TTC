@@ -1,345 +1,811 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Теннисный калькулятор</title>
-<style>
-:root{--bg-primary:#1a1a2e;--bg-secondary:#16213e;--accent:#4cc9f0;--accent-dark:#4361ee;--text-primary:#e6e6e6;--text-secondary:#a0a0a0;--card-bg:#0f3460;--input-bg:#1f4068;--success:#4ade80;--danger:#f87171;--warning:#fbbf24;--transition:all 0.3s ease}
-[data-theme="light"]{--bg-primary:#f0f4f8;--bg-secondary:#d9e2ec;--accent:#3b82f6;--accent-dark:#2563eb;--text-primary:#1e293b;--text-secondary:#64748b;--card-bg:#ffffff;--input-bg:#f1f5f9;--success:#22c55e;--danger:#ef4444;--warning:#f59e0b}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,var(--bg-primary),var(--bg-secondary));color:var(--text-primary);min-height:100vh;padding:10px;transition:var(--transition)}
-.container{max-width:800px;margin:0 auto;padding-bottom:10px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:5px 0}
-h1{font-size:1.3rem;background:linear-gradient(to right,var(--accent),var(--accent-dark));-webkit-background-clip:text;background-clip:text;color:transparent;padding:5px 0}
-.theme-switch{position:relative;display:inline-block;width:50px;height:25px}
-.theme-switch input{opacity:0;width:0;height:0}
-.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--input-bg);transition:var(--transition);border-radius:30px}
-.slider:before{position:absolute;content:"";height:19px;width:19px;left:3px;bottom:3px;background:linear-gradient(45deg,#ff9a9e,#fad0c4);transition:var(--transition);border-radius:50%}
-input:checked+.slider{background-color:var(--accent-dark)}
-input:checked+.slider:before{transform:translateX(25px);background:linear-gradient(45deg,#4facfe,#00f2fe)}
-.card{background:var(--card-bg);border-radius:8px;padding:12px;margin-bottom:12px;box-shadow:0 3px 8px rgba(0,0,0,0.2);border:1px solid rgba(76,201,240,0.1)}
-.card-title{font-size:1.1rem;margin-bottom:8px;color:var(--accent);display:flex;align-items:center}
-.card-title i{margin-right:5px}
-.input-group{margin-bottom:8px}
-.input-group label{display:block;margin-bottom:3px;color:var(--text-secondary);font-size:0.85rem}
-select,input{width:100%;padding:8px 10px;background:var(--input-bg);border:1px solid rgba(76,201,240,0.3);border-radius:6px;color:var(--text-primary);font-size:0.9rem}
-select:focus,input:focus{border-color:var(--accent);outline:none}
-.keyboard{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.key{background:var(--input-bg);border:1px solid rgba(76,201,240,0.3);border-radius:6px;padding:8px;text-align:center;cursor:pointer;font-size:0.9rem;user-select:none}
-.key:hover{background:rgba(76,201,240,0.2)}
-.reset-key{grid-column:span 3;background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.3)}
-.btn{background:linear-gradient(to right,var(--accent),var(--accent-dark));color:white;border:none;padding:10px;border-radius:6px;cursor:pointer;width:100%;font-size:0.95rem;margin-top:8px}
-.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.result-card{background:var(--input-bg);border-radius:6px;padding:12px;text-align:center;border:1px solid transparent}
-.result-card.value{border-color:var(--success)}
-.result-card.no-value{border-color:var(--danger)}
-.result-card.neutral{border-color:var(--warning)}
-.result-title{font-size:0.85rem;margin-bottom:8px;color:var(--text-secondary)}
-.result-value{font-size:1.2rem;font-weight:700;margin-bottom:5px}
-.result-prob{font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:5px}
-.prob-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;margin-top:8px;overflow:hidden}
-.prob-fill{height:100%;background:linear-gradient(to right,var(--accent),var(--accent-dark));border-radius:4px}
-.recommendation{background:rgba(76,201,240,0.1);border-left:3px solid var(--accent);padding:10px;border-radius:0 6px 6px 0;margin-top:12px;font-size:0.9rem;line-height:1.5}
-.score-inputs{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
-.score-separator{font-size:1.5rem;font-weight:bold;color:var(--accent)}
-.input-row{display:flex;gap:10px}
-.input-row .input-group{flex:1}
-@media (max-width:768px){.results-grid{grid-template-columns:1fr}.input-row{flex-direction:column;gap:8px}.card-title{font-size:1rem}.result-title{font-size:0.8rem}.result-value{font-size:1.1rem}.recommendation{font-size:0.85rem}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Теннисный калькулятор тоталов</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --accent: #4cc9f0;
+            --accent-dark: #4361ee;
+            --text-primary: #e6e6e6;
+            --text-secondary: #a0a0a0;
+            --card-bg: #0f3460;
+            --input-bg: #1f4068;
+            --success: #4ade80;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #d9e2ec;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --card-bg: #ffffff;
+            --input-bg: #f1f5f9;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 15px;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--accent), var(--accent-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 5px 0;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--input-bg);
+            transition: var(--transition);
+            border-radius: 30px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            left: 3px;
+            bottom: 3px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-dark);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(25px);
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+        }
+
+        .instructions {
+            padding: 15px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--input-bg);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+        }
+
+        .score-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-inputs input {
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 12px;
+        }
+
+        .score-separator {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .key {
+            background: var(--input-bg);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .key:hover {
+            background: rgba(76, 201, 240, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .key:active {
+            transform: translateY(1px);
+        }
+
+        .reset-key {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(to right, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: var(--input-bg);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .result-card.value {
+            border-color: var(--success);
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+        }
+
+        .result-card.no-value {
+            border-color: var(--danger);
+        }
+
+        .result-card.neutral {
+            border-color: var(--warning);
+        }
+
+        .result-title {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-prob {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .prob-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .prob-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--accent), var(--accent-dark));
+            border-radius: 5px;
+        }
+
+        .recommendation {
+            background: rgba(76, 201, 240, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .example {
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .example h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .keyboard {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .card-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-<header>
-    <h1>🎾 Теннисный калькулятор</h1>
-    <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"></span></label>
-</header>
-
-<div class="card">
-    <div class="card-title">⚙️ Параметры</div>
-    <div class="input-group">
-        <label for="inputType">Тип данных</label>
-        <select id="inputType">
-            <option value="points">Вероятности на очках</option>
-            <option value="games">Вероятности на геймах</option>
-        </select>
-    </div>
-    
-    <div id="pointsInput">
-        <div class="input-row">
-            <div class="input-group">
-                <label for="p1Serve">Игрок 1 (подача)</label>
-                <input type="number" id="p1Serve" min="0" max="1" step="0.01" value="0.65">
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tennis-ball"></i> Теннисный калькулятор тоталов</h1>
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+            </label>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="calculator">Калькулятор</div>
+            <div class="tab" data-tab="instructions">Как пользоваться</div>
+        </div>
+        
+        <div class="tab-content active" id="calculator-tab">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-sliders-h"></i> Параметры расчета</div>
+                
+                <div class="input-group">
+                    <label for="inputType">Тип ввода данных</label>
+                    <select id="inputType">
+                        <option value="points">Вероятности на уровне очков</option>
+                        <option value="games">Вероятности на уровне геймов</option>
+                    </select>
+                </div>
+                
+                <div id="pointsInput">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="p1Serve">Игрок 1: вероятность выигрыша очка на своей подаче</label>
+                            <input type="number" id="p1Serve" min="0" max="1" step="0.01" value="0.65">
+                        </div>
+                        <div class="input-group">
+                            <label for="p2Serve">Игрок 2: вероятность выигрыша очка на своей подаче</label>
+                            <input type="number" id="p2Serve" min="0" max="1" step="0.01" value="0.65">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="gamesInput" style="display:none;">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="pg1">Игрок 1: вероятность выигрыша гейма на своей подаче</label>
+                            <input type="number" id="pg1" min="0" max="1" step="0.01" value="0.83">
+                        </div>
+                        <div class="input-group">
+                            <label for="pg2">Игрок 2: вероятность выигрыша гейма на своей подаче</label>
+                            <input type="number" id="pg2" min="0" max="1" step="0.01" value="0.83">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Текущий счёт (геймы)</label>
+                    <div class="score-inputs">
+                        <input type="text" id="score1" value="7" class="score-input" readonly>
+                        <div class="score-separator">:</div>
+                        <input type="text" id="score2" value="6" class="score-input" readonly>
+                    </div>
+                </div>
+                
+                <div class="keyboard">
+                    <div class="key" data-value="0">0</div>
+                    <div class="key" data-value="1">1</div>
+                    <div class="key" data-value="2">2</div>
+                    <div class="key" data-value="3">3</div>
+                    <div class="key" data-value="4">4</div>
+                    <div class="key" data-value="5">5</div>
+                    <div class="key" data-value="6">6</div>
+                    <div class="key" data-value="7">7</div>
+                    <div class="key" data-value="8">8</div>
+                    <div class="key" data-value="9">9</div>
+                    <div class="key reset-key" id="resetScore">Сброс</div>
+                </div>
+                
+                <button id="calculateBtn" class="btn">Рассчитать вероятности</button>
             </div>
-            <div class="input-group">
-                <label for="p2Serve">Игрок 2 (подача)</label>
-                <input type="number" id="p2Serve" min="0" max="1" step="0.01" value="0.65">
+            
+            <div class="card">
+                <div class="card-title"><i class="fas fa-chart-bar"></i> Результаты расчета</div>
+                <div id="results">
+                    <div class="instructions">
+                        <h3><i class="fas fa-info-circle"></i> Инструкция</h3>
+                        <p>Введите параметры и текущий счёт, затем нажмите "Рассчитать вероятности". Результаты появятся здесь.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="instructions-tab">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-book"></i> Как пользоваться программой</div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-lightbulb"></i> Основная концепция</h3>
+                    <p>Этот калькулятор помогает определить вероятность пробития тоталов (17.5, 18.5, 19.5) в теннисном сете на основе текущего счета и силы игроков.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Выберите тип ввода данных</h3>
+                        <p><strong>Вероятности на уровне очков</strong> - введите вероятность, с которой каждый игрок выигрывает очко на своей подаче (например, 0.65).</p>
+                        <p><strong>Вероятности на уровне геймов</strong> - введите вероятность, с которой каждый игрок выигрывает гейм на своей подаче (например, 0.83).</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Введите параметры игроков</h3>
+                        <p>Укажите значения вероятностей для обоих игроков. Значения должны быть между 0 и 1.</p>
+                        <div class="example">
+                            <h3><i class="fas fa-star"></i> Пример:</h3>
+                            <p>Если оба игрока равны по силе, введите 0.65 для обоих (на уровне очков) или 0.83 (на уровне геймов).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Укажите текущий счет</h3>
+                        <p>Используйте цифровую клавиатуру для ввода текущего счета в геймах. Нажмите на поле счета, затем выберите цифру на клавиатуре.</p>
+                        <p>Кнопка "Сброс" обнуляет активное поле счета.</p>
+                        <div class="example">
+                            <h3><i class="fas fa-star"></i> Пример:</h3>
+                            <p>Счет 7:6 означает, что первый игрок выиграл 7 геймов, второй - 6 геймов.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>Нажмите "Рассчитать вероятности"</h3>
+                        <p>Программа рассчитает вероятность пробития каждого тотала и покажет результаты.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div>
+                        <h3>Анализ результатов</h3>
+                        <p>Результаты отображаются в виде карточек для каждого тотала:</p>
+                        <ul style="padding-left: 20px; margin-top: 10px;">
+                            <li><strong>Вероятность</strong> - шанс, что сет закончится с общим количеством геймов больше указанного</li>
+                            <li><strong>Кэф</strong> - справедливый коэффициент</li>
+                            <li><strong>Цвет рамки</strong> - указывает на наличие value-ставки (зеленый - выгодно, красный - невыгодно)</li>
+                        </ul>
+                        <div class="example">
+                            <h3><i class="fas fa-star"></i> Пример:</h3>
+                            <p>При счете 7:6 и равных игроках вероятность ТБ 19.5 ≈ 53%, справедливый кэф ≈ 1.86. Ставка будет выгодной, если букмекер дает коэффициент выше 2.10.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div>
+                        <h3>Используйте рекомендации</h3>
+                        <p>В разделе "Рекомендация" вы получите совет о том, на какой тотал выгоднее ставить в текущей ситуации.</p>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-trophy"></i> Стратегия ставок</h3>
+                    <p>Основная цель - найти ситуации, когда вероятность пробития тотала высока, но букмекер еще не скорректировал коэффициенты. Такие ставки называются value-ставками.</p>
+                    <p>Лучшие моменты для ставок:</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>Счет 7:6 - ТБ 19.5 при коэффициенте выше 2.10</li>
+                        <li>Счет 8:7 - ТБ 18.5 при коэффициенте выше 1.90</li>
+                        <li>Счет 9:8 - ТБ 17.5 при коэффициенте выше 1.65</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    
-    <div id="gamesInput" style="display:none;">
-        <div class="input-row">
-            <div class="input-group">
-                <label for="pg1">Игрок 1 (гейм)</label>
-                <input type="number" id="pg1" min="0" max="1" step="0.01" value="0.83">
-            </div>
-            <div class="input-group">
-                <label for="pg2">Игрок 2 (гейм)</label>
-                <input type="number" id="pg2" min="0" max="1" step="0.01" value="0.83">
-            </div>
-        </div>
-    </div>
-    
-    <div class="input-group">
-        <label>Счёт (геймы)</label>
-        <div class="score-inputs">
-            <input type="text" id="score1" value="7" class="score-input" readonly>
-            <div class="score-separator">:</div>
-            <input type="text" id="score2" value="6" class="score-input" readonly>
-        </div>
-    </div>
-    
-    <div class="keyboard">
-        <div class="key" data-value="0">0</div>
-        <div class="key" data-value="1">1</div>
-        <div class="key" data-value="2">2</div>
-        <div class="key" data-value="3">3</div>
-        <div class="key" data-value="4">4</div>
-        <div class="key" data-value="5">5</div>
-        <div class="key" data-value="6">6</div>
-        <div class="key" data-value="7">7</div>
-        <div class="key" data-value="8">8</div>
-        <div class="key" data-value="9">9</div>
-        <div class="key reset-key" id="resetScore">Сброс</div>
-    </div>
-    
-    <button id="calculateBtn" class="btn">Рассчитать</button>
-</div>
 
-<div class="card">
-    <div class="card-title">📊 Результаты</div>
-    <div id="results">
-        <div class="results-grid">
-            <div class="result-card value">
-                <div class="result-title">Тотал 17.5</div>
-                <div class="result-value">86.4%</div>
-                <div class="result-prob">Кэф: 1.16</div>
-                <div class="prob-bar"><div class="prob-fill" style="width:86%"></div></div>
-            </div>
-            <div class="result-card value">
-                <div class="result-title">Тотал 18.5</div>
-                <div class="result-value">72.1%</div>
-                <div class="result-prob">Кэф: 1.39</div>
-                <div class="prob-bar"><div class="prob-fill" style="width:72%"></div></div>
-            </div>
-            <div class="result-card neutral">
-                <div class="result-title">Тотал 19.5</div>
-                <div class="result-value">53.8%</div>
-                <div class="result-prob">Кэф: 1.86</div>
-                <div class="prob-bar"><div class="prob-fill" style="width:54%"></div></div>
-            </div>
-        </div>
-        <div class="recommendation">
-            <strong>Рекомендация:</strong> Наибольшая ценность в ставке на ТБ 19.5 - вероятность 53.8% при справедливом кэфе 1.86. Ищите коэффициенты выше 2.10.
-        </div>
-    </div>
-</div>
-</div>
+    <script>
+        // Переключение темы
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('change', function() {
+            document.body.setAttribute('data-theme', this.checked ? 'light' : 'dark');
+        });
 
-<script>
-// Переключение темы
-const themeToggle = document.getElementById('theme-toggle');
-themeToggle.addEventListener('change', function() {
-    document.body.setAttribute('data-theme', this.checked ? 'light' : 'dark');
-});
+        // Переключение вкладок
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+            });
+        });
 
-// Переключение типа ввода
-document.getElementById('inputType').addEventListener('change', function() {
-    const type = this.value;
-    document.getElementById('pointsInput').style.display = type === 'points' ? 'flex' : 'none';
-    document.getElementById('gamesInput').style.display = type === 'games' ? 'flex' : 'none';
-});
+        // Переключение типа ввода
+        document.getElementById('inputType').addEventListener('change', function() {
+            const type = this.value;
+            document.getElementById('pointsInput').style.display = type === 'points' ? 'block' : 'none';
+            document.getElementById('gamesInput').style.display = type === 'games' ? 'block' : 'none';
+        });
 
-// Отключение системной клавиатуры
-document.querySelectorAll('.score-input').forEach(input => {
-    input.addEventListener('focus', function(e) {
-        e.preventDefault();
-        this.blur();
-    });
-});
+        // Отключение системной клавиатуры
+        document.querySelectorAll('.score-input').forEach(input => {
+            input.addEventListener('focus', function(e) {
+                e.preventDefault();
+                this.blur();
+            });
+        });
 
-// Кастомная клавиатура
-let activeInput = null;
-const scoreInputs = document.querySelectorAll('.score-input');
-scoreInputs.forEach(input => {
-    input.addEventListener('click', function() {
-        activeInput = this;
-    });
-});
+        // Кастомная клавиатура
+        let activeInput = null;
+        const scoreInputs = document.querySelectorAll('.score-input');
+        scoreInputs.forEach(input => {
+            input.addEventListener('click', function() {
+                activeInput = this;
+                this.focus({preventScroll: true});
+            });
+        });
 
-document.querySelectorAll('.key').forEach(key => {
-    if (key.id !== 'resetScore') {
-        key.addEventListener('click', function() {
-            if (activeInput) {
-                const value = this.getAttribute('data-value');
-                activeInput.value = activeInput.value === '0' ? value : activeInput.value + value;
+        document.querySelectorAll('.key').forEach(key => {
+            if (key.id !== 'resetScore') {
+                key.addEventListener('click', function() {
+                    if (activeInput) {
+                        const value = this.getAttribute('data-value');
+                        activeInput.value = activeInput.value === '0' ? value : activeInput.value + value;
+                    }
+                });
             }
         });
-    }
-});
 
-document.getElementById('resetScore').addEventListener('click', function() {
-    if (activeInput) activeInput.value = '0';
-});
+        document.getElementById('resetScore').addEventListener('click', function() {
+            if (activeInput) activeInput.value = '0';
+        });
 
-// Расчет вероятности выигрыша гейма
-function gameWinProb(p) {
-    if (p >= 0.999) return 1;
-    if (p <= 0.001) return 0;
-    const q = 1 - p;
-    const p4 = p ** 4;
-    const winWithoutDeuce = p4 * (1 + 4 * q + 10 * q * q);
-    const goDeuce = 20 * p ** 3 * q ** 3;
-    const probDeuce = (p * p) / (p * p + q * q);
-    return winWithoutDeuce + goDeuce * probDeuce;
-}
+        // Расчет вероятности выигрыша гейма
+        function gameWinProb(p) {
+            if (p >= 0.999) return 1;
+            if (p <= 0.001) return 0;
+            const q = 1 - p;
+            const p4 = p ** 4;
+            const winWithoutDeuce = p4 * (1 + 4 * q + 10 * q * q);
+            const goDeuce = 20 * p ** 3 * q ** 3;
+            const probDeuce = (p * p) / (p * p + q * q);
+            return winWithoutDeuce + goDeuce * probDeuce;
+        }
 
-// Проверка завершения сета
-function isFinal(i, j) {
-    return (i >= 6 && j >= 6 && Math.abs(i - j) >= 2) || 
-           (i >= 6 && i - j >= 2) || 
-           (j >= 6 && j - i >= 2);
-}
+        // Проверка завершения сета
+        function isFinal(i, j) {
+            return (i >= 6 && j >= 6 && Math.abs(i - j) >= 2) || 
+                   (i >= 6 && i - j >= 2) || 
+                   (j >= 6 && j - i >= 2);
+        }
 
-// Основной расчет
-function calculateProbabilities() {
-    const inputType = document.getElementById('inputType').value;
-    let pg1, pg2;
-    
-    if (inputType === 'points') {
-        const p1Serve = parseFloat(document.getElementById('p1Serve').value);
-        const p2Serve = parseFloat(document.getElementById('p2Serve').value);
-        pg1 = gameWinProb(p1Serve);
-        pg2 = gameWinProb(p2Serve);
-    } else {
-        pg1 = parseFloat(document.getElementById('pg1').value);
-        pg2 = parseFloat(document.getElementById('pg2').value);
-    }
-    
-    const a = parseInt(document.getElementById('score1').value);
-    const b = parseInt(document.getElementById('score2').value);
-    
-    if (isNaN(pg1) || isNaN(pg2) || isNaN(a) || isNaN(b)) {
-        alert("Проверьте введенные значения");
-        return;
-    }
-    
-    if (isFinal(a, b)) {
-        const total = a + b;
-        displayResults(total >= 18 ? 1 : 0, total >= 19 ? 1 : 0, total >= 20 ? 1 : 0);
-        return;
-    }
-    
-    const maxGames = a + b + 30;
-    let states = {[`${a},${b}`]: 1};
-    let finalProbs = {};
-    
-    for (let totalGames = a + b; totalGames <= maxGames; totalGames++) {
-        const nextStates = {};
-        let hasStates = false;
-        
-        for (const stateKey in states) {
-            const [i, j] = stateKey.split(',').map(Number);
-            const pState = states[stateKey];
+        // Основной расчет
+        function calculateProbabilities() {
+            const inputType = document.getElementById('inputType').value;
+            let pg1, pg2;
             
-            if (isFinal(i, j)) {
-                finalProbs[stateKey] = (finalProbs[stateKey] || 0) + pState;
-                continue;
+            if (inputType === 'points') {
+                const p1Serve = parseFloat(document.getElementById('p1Serve').value);
+                const p2Serve = parseFloat(document.getElementById('p2Serve').value);
+                pg1 = gameWinProb(p1Serve);
+                pg2 = gameWinProb(p2Serve);
+            } else {
+                pg1 = parseFloat(document.getElementById('pg1').value);
+                pg2 = parseFloat(document.getElementById('pg2').value);
             }
             
-            const p1Win = (totalGames % 2 === 0) ? pg1 : (1 - pg2);
-            nextStates[`${i+1},${j}`] = (nextStates[`${i+1},${j}`] || 0) + pState * p1Win;
-            nextStates[`${i},${j+1}`] = (nextStates[`${i},${j+1}`] || 0) + pState * (1 - p1Win);
-            hasStates = true;
+            const a = parseInt(document.getElementById('score1').value);
+            const b = parseInt(document.getElementById('score2').value);
+            
+            if (isNaN(pg1) || isNaN(pg2) || isNaN(a) || isNaN(b)) {
+                alert("Пожалуйста, проверьте введенные значения");
+                return;
+            }
+            
+            if (isFinal(a, b)) {
+                const total = a + b;
+                displayResults(total >= 18 ? 1 : 0, total >= 19 ? 1 : 0, total >= 20 ? 1 : 0);
+                return;
+            }
+            
+            const maxGames = a + b + 30;
+            let states = {[`${a},${b}`]: 1};
+            let finalProbs = {};
+            
+            for (let totalGames = a + b; totalGames <= maxGames; totalGames++) {
+                const nextStates = {};
+                let hasStates = false;
+                
+                for (const stateKey in states) {
+                    const [i, j] = stateKey.split(',').map(Number);
+                    const pState = states[stateKey];
+                    
+                    if (isFinal(i, j)) {
+                        finalProbs[stateKey] = (finalProbs[stateKey] || 0) + pState;
+                        continue;
+                    }
+                    
+                    const p1Win = (totalGames % 2 === 0) ? pg1 : (1 - pg2);
+                    nextStates[`${i+1},${j}`] = (nextStates[`${i+1},${j}`] || 0) + pState * p1Win;
+                    nextStates[`${i},${j+1}`] = (nextStates[`${i},${j+1}`] || 0) + pState * (1 - p1Win);
+                    hasStates = true;
+                }
+                
+                if (!hasStates) break;
+                states = nextStates;
+            }
+            
+            for (const stateKey in states) {
+                finalProbs[stateKey] = (finalProbs[stateKey] || 0) + states[stateKey];
+            }
+            
+            const distTotal = {};
+            for (const stateKey in finalProbs) {
+                const [i, j] = stateKey.split(',').map(Number);
+                const total = i + j;
+                distTotal[total] = (distTotal[total] || 0) + finalProbs[stateKey];
+            }
+            
+            let p17 = 0, p18 = 0, p19 = 0;
+            for (const total in distTotal) {
+                const t = parseInt(total);
+                if (t >= 18) p17 += distTotal[total];
+                if (t >= 19) p18 += distTotal[total];
+                if (t >= 20) p19 += distTotal[total];
+            }
+            
+            displayResults(p17, p18, p19);
         }
+
+        // Отображение результатов
+        function displayResults(p17, p18, p19) {
+            const fair17 = p17 > 0 ? (1 / p17).toFixed(2) : '-';
+            const fair18 = p18 > 0 ? (1 / p18).toFixed(2) : '-';
+            const fair19 = p19 > 0 ? (1 / p19).toFixed(2) : '-';
+            
+            const isValue17 = fair17 > 0 && parseFloat(fair17) > 1.65;
+            const isValue18 = fair18 > 0 && parseFloat(fair18) > 1.90;
+            const isValue19 = fair19 > 0 && parseFloat(fair19) > 2.10;
+            
+            let recommendation = '';
+            if (isValue19) {
+                recommendation = `<strong>Рекомендация:</strong> Лучшая ставка: ТБ 19.5. Вероятность: ${(p19*100).toFixed(1)}%, справедливый кэф: ${fair19}. Ищите коэффициенты выше 2.10.`;
+            } else if (isValue18) {
+                recommendation = `<strong>Рекомендация:</strong> Ставка ТБ 18.5. Вероятность: ${(p18*100).toFixed(1)}%, справедливый кэф: ${fair18}. Ищите коэффициенты выше 1.90.`;
+            } else if (isValue17) {
+                recommendation = `<strong>Рекомендация:</strong> Ставка ТБ 17.5. Вероятность: ${(p17*100).toFixed(1)}%, справедливый кэф: ${fair17}. Ищите коэффициенты выше 1.65.`;
+            } else {
+                recommendation = `<strong>Рекомендация:</strong> Нет явных value-ставок при текущем счёте. Дождитесь более благоприятного момента.`;
+            }
+            
+            document.getElementById('results').innerHTML = `
+                <div class="results-grid">
+                    <div class="result-card ${isValue17 ? 'value' : 'no-value'}">
+                        <div class="result-title">Тотал 17.5</div>
+                        <div class="result-value">${(p17*100).toFixed(1)}%</div>
+                        <div class="result-prob">Кэф: ${fair17}</div>
+                        <div class="prob-bar"><div class="prob-fill" style="width:${p17*100}%"></div></div>
+                    </div>
+                    <div class="result-card ${isValue18 ? 'value' : 'no-value'}">
+                        <div class="result-title">Тотал 18.5</div>
+                        <div class="result-value">${(p18*100).toFixed(1)}%</div>
+                        <div class="result-prob">Кэф: ${fair18}</div>
+                        <div class="prob-bar"><div class="prob-fill" style="width:${p18*100}%"></div></div>
+                    </div>
+                    <div class="result-card ${isValue19 ? 'value' : 'neutral'}">
+                        <div class="result-title">Тотал 19.5</div>
+                        <div class="result-value">${(p19*100).toFixed(1)}%</div>
+                        <div class="result-prob">Кэф: ${fair19}</div>
+                        <div class="prob-bar"><div class="prob-fill" style="width:${p19*100}%"></div></div>
+                    </div>
+                </div>
+                <div class="recommendation">${recommendation}</div>
+            `;
+        }
+
+        // Инициализация
+        document.getElementById('calculateBtn').addEventListener('click', calculateProbabilities);
+        document.getElementById('score1').addEventListener('click', function() { activeInput = this; });
+        document.getElementById('score2').addEventListener('click', function() { activeInput = this; });
         
-        if (!hasStates) break;
-        states = nextStates;
-    }
-    
-    for (const stateKey in states) {
-        finalProbs[stateKey] = (finalProbs[stateKey] || 0) + states[stateKey];
-    }
-    
-    const distTotal = {};
-    for (const stateKey in finalProbs) {
-        const [i, j] = stateKey.split(',').map(Number);
-        const total = i + j;
-        distTotal[total] = (distTotal[total] || 0) + finalProbs[stateKey];
-    }
-    
-    let p17 = 0, p18 = 0, p19 = 0;
-    for (const total in distTotal) {
-        const t = parseInt(total);
-        if (t >= 18) p17 += distTotal[total];
-        if (t >= 19) p18 += distTotal[total];
-        if (t >= 20) p19 += distTotal[total];
-    }
-    
-    displayResults(p17, p18, p19);
-}
-
-// Отображение результатов
-function displayResults(p17, p18, p19) {
-    const fair17 = p17 > 0 ? (1 / p17).toFixed(2) : '-';
-    const fair18 = p18 > 0 ? (1 / p18).toFixed(2) : '-';
-    const fair19 = p19 > 0 ? (1 / p19).toFixed(2) : '-';
-    
-    const isValue17 = fair17 > 0 && parseFloat(fair17) > 1.65;
-    const isValue18 = fair18 > 0 && parseFloat(fair18) > 1.90;
-    const isValue19 = fair19 > 0 && parseFloat(fair19) > 2.10;
-    
-    let recommendation = '';
-    if (isValue19) {
-        recommendation = `<strong>Рекомендация:</strong> Лучшая ставка: ТБ 19.5. Вероятность: ${(p19*100).toFixed(1)}%, справедливый кэф: ${fair19}. Ищите коэффициенты выше 2.10.`;
-    } else if (isValue18) {
-        recommendation = `<strong>Рекомендация:</strong> Ставка ТБ 18.5. Вероятность: ${(p18*100).toFixed(1)}%, справедливый кэф: ${fair18}. Ищите коэффициенты выше 1.90.`;
-    } else if (isValue17) {
-        recommendation = `<strong>Рекомендация:</strong> Ставка ТБ 17.5. Вероятность: ${(p17*100).toFixed(1)}%, справедливый кэф: ${fair17}. Ищите коэффициенты выше 1.65.`;
-    } else {
-        recommendation = `<strong>Рекомендация:</strong> Нет явных value-ставок при текущем счёте. Дождитесь более благоприятного момента.`;
-    }
-    
-    document.getElementById('results').innerHTML = `
-        <div class="results-grid">
-            <div class="result-card ${isValue17 ? 'value' : 'no-value'}">
-                <div class="result-title">Тотал 17.5</div>
-                <div class="result-value">${(p17*100).toFixed(1)}%</div>
-                <div class="result-prob">Кэф: ${fair17}</div>
-                <div class="prob-bar"><div class="prob-fill" style="width:${p17*100}%"></div></div>
-            </div>
-            <div class="result-card ${isValue18 ? 'value' : 'no-value'}">
-                <div class="result-title">Тотал 18.5</div>
-                <div class="result-value">${(p18*100).toFixed(1)}%</div>
-                <div class="result-prob">Кэф: ${fair18}</div>
-                <div class="prob-bar"><div class="prob-fill" style="width:${p18*100}%"></div></div>
-            </div>
-            <div class="result-card ${isValue19 ? 'value' : 'neutral'}">
-                <div class="result-title">Тотал 19.5</div>
-                <div class="result-value">${(p19*100).toFixed(1)}%</div>
-                <div class="result-prob">Кэф: ${fair19}</div>
-                <div class="prob-bar"><div class="prob-fill" style="width:${p19*100}%"></div></div>
-            </div>
-        </div>
-        <div class="recommendation">${recommendation}</div>
-    `;
-}
-
-// Инициализация
-document.getElementById('calculateBtn').addEventListener('click', calculateProbabilities);
-document.getElementById('score1').addEventListener('click', function() { activeInput = this; });
-document.getElementById('score2').addEventListener('click', function() { activeInput = this; });
-</script>
+        // Показать инструкцию при первом запуске
+        setTimeout(() => {
+            document.querySelector('.tab[data-tab="instructions"]').click();
+        }, 100);
+    </script>
 </body>
 </html>
