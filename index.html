@@ -1194,6 +1194,42 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+        
+        /* iOS оптимизация клавиатуры */
+        .ios-keyboard-optimized {
+            font-size: 16px !important; /* Предотвращает масштабирование в iOS */
+        }
+        
+        /* Класс для числовых полей с десятичной точкой */
+        .decimal-input {
+            inputmode: decimal;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        /* Специальные стили для iOS */
+        @supports (-webkit-touch-callout: none) {
+            input[type="number"] {
+                font-size: 16px !important;
+                letter-spacing: 0.5px;
+            }
+            
+            .input-item input:focus,
+            .total-item input:focus {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            
+            /* Улучшение для виртуальной клавиатуры iOS */
+            .keyboard-open {
+                padding-bottom: 300px !important;
+            }
+            
+            /* Плавное появление клавиатуры */
+            input, select {
+                transition: all 0.3s ease;
+            }
+        }
     </style>
 </head>
 <body class="theme-default">
@@ -1254,11 +1290,13 @@
                             </div>
                             <div class="input-item">
                                 <label>П1 старый</label>
-                                <input type="number" id="p1_old" step="0.01" min="1.01" value="1.85" placeholder="1.85">
+                                <input type="number" id="p1_old" step="0.01" min="1.01" value="1.85" placeholder="1.85" 
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                             <div class="input-item">
                                 <label>П2 старый</label>
-                                <input type="number" id="p2_old" step="0.01" min="1.01" value="2.05" placeholder="2.05">
+                                <input type="number" id="p2_old" step="0.01" min="1.01" value="2.05" placeholder="2.05"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                         </div>
                         
@@ -1277,11 +1315,13 @@
                             </div>
                             <div class="input-item">
                                 <label>П1 новый</label>
-                                <input type="number" id="p1_new" step="0.01" min="1.01" value="1.75" placeholder="1.75">
+                                <input type="number" id="p1_new" step="0.01" min="1.01" value="1.75" placeholder="1.75"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                             <div class="input-item">
                                 <label>П2 новый</label>
-                                <input type="number" id="p2_new" step="0.01" min="1.01" value="2.20" placeholder="2.20">
+                                <input type="number" id="p2_new" step="0.01" min="1.01" value="2.20" placeholder="2.20"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                         </div>
                     </div>
@@ -1301,27 +1341,33 @@
                         <div class="totals-grid">
                             <div class="total-item">
                                 <label>ТБ 2.5</label>
-                                <input type="number" id="tb25_old" step="0.01" min="1.01" value="1.95">
+                                <input type="number" id="tb25_old" step="0.01" min="1.01" value="1.95"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                             <div class="total-item">
                                 <label>ТМ 2.5</label>
-                                <input type="number" id="tm25_old" step="0.01" min="1.01" value="1.85">
+                                <input type="number" id="tm25_old" step="0.01" min="1.01" value="1.85"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                             <div class="total-item">
                                 <label>ТБ 3.5</label>
-                                <input type="number" id="tb35_old" step="0.01" min="1.01" value="2.30">
+                                <input type="number" id="tb35_old" step="0.01" min="1.01" value="2.30"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                             <div class="total-item">
                                 <label>ТМ 3.5</label>
-                                <input type="number" id="tm35_old" step="0.01" min="1.01" value="1.65">
+                                <input type="number" id="tm35_old" step="0.01" min="1.01" value="1.65"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                             <div class="total-item">
                                 <label>ТБ 1.5</label>
-                                <input type="number" id="tb15_old" step="0.01" min="1.01" value="1.45">
+                                <input type="number" id="tb15_old" step="0.01" min="1.01" value="1.45"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                             <div class="total-item">
                                 <label>ТМ 1.5</label>
-                                <input type="number" id="tm15_old" step="0.01" min="1.01" value="2.70">
+                                <input type="number" id="tm15_old" step="0.01" min="1.01" value="2.70"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
                             </div>
                         </div>
                     </div>
@@ -1769,9 +1815,7 @@
             </div>
             
             <footer>
-                <p>© 2025 Калькулятор тоталов с историей ставок</p>
-                <p>Программа создана Игорем Ефимовым для улучшения благосостояния людей</p>
-                <p>Защищена авторскими правами</p>
+                <p>© 2023 Калькулятор тоталов с историей ставок</p>
                 <p style="font-size: 0.7rem; opacity: 0.7; margin-top: 2px;">Ставки делайте ответственно. 18+</p>
             </footer>
         </div>
@@ -1865,6 +1909,82 @@
                     bestTime: '80-85 минута'
                 }
             };
+            
+            // ОПТИМИЗАЦИЯ ДЛЯ iOS - ЦИФРОВАЯ КЛАВИАТУРА
+            function setupIOSKeyboard() {
+                const numberInputs = document.querySelectorAll('input[type="number"]');
+                
+                numberInputs.forEach(input => {
+                    // Для iOS добавляем специальные атрибуты для цифровой клавиатуры с десятичной точкой
+                    input.setAttribute('inputmode', 'decimal');
+                    input.setAttribute('pattern', '[0-9]*[.,]?[0-9]*');
+                    
+                    // Обработка ввода для iOS
+                    input.addEventListener('focus', function() {
+                        // При фокусе добавляем класс для iOS
+                        this.classList.add('ios-focused');
+                        
+                        // На iOS фокус на input может вызвать неправильную прокрутку
+                        setTimeout(() => {
+                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                    });
+                    
+                    input.addEventListener('blur', function() {
+                        this.classList.remove('ios-focused');
+                    });
+                    
+                    // Автозамена запятой на точку для корректного парсинга
+                    input.addEventListener('input', function(e) {
+                        let value = this.value;
+                        
+                        // Заменяем запятую на точку
+                        value = value.replace(/,/g, '.');
+                        
+                        // Удаляем все символы, кроме цифр и точки
+                        value = value.replace(/[^\d.]/g, '');
+                        
+                        // Удаляем лишние точки (оставляем только первую)
+                        const parts = value.split('.');
+                        if (parts.length > 2) {
+                            value = parts[0] + '.' + parts.slice(1).join('');
+                        }
+                        
+                        // Ограничиваем двумя знаками после запятой
+                        if (value.includes('.')) {
+                            const decimalParts = value.split('.');
+                            if (decimalParts[1].length > 2) {
+                                value = decimalParts[0] + '.' + decimalParts[1].substring(0, 2);
+                            }
+                        }
+                        
+                        this.value = value;
+                    });
+                    
+                    // Для iOS также обрабатываем событие change
+                    input.addEventListener('change', function() {
+                        let value = this.value;
+                        value = value.replace(/,/g, '.');
+                        this.value = value;
+                    });
+                });
+                
+                // Для селектов также улучшаем UX на iOS
+                const selectElements = document.querySelectorAll('select');
+                selectElements.forEach(select => {
+                    select.addEventListener('focus', function() {
+                        // На iOS увеличиваем шрифт при фокусе на селекте
+                        this.style.fontSize = '16px';
+                    });
+                    
+                    select.addEventListener('blur', function() {
+                        this.style.fontSize = '';
+                    });
+                });
+            }
+            
+            // Инициализация iOS оптимизации
+            setupIOSKeyboard();
             
             // Управление вкладками
             tabs.forEach(tab => {
@@ -2117,11 +2237,19 @@
             
             // Функция расчета с учетом времени
             function calculate() {
-                // Получаем значения
-                const p1_old = parseFloat(document.getElementById('p1_old').value) || 1.85;
-                const p2_old = parseFloat(document.getElementById('p2_old').value) || 2.05;
-                const p1_new = parseFloat(document.getElementById('p1_new').value) || 1.75;
-                const p2_new = parseFloat(document.getElementById('p2_new').value) || 2.20;
+                // Функция для безопасного парсинга чисел с заменой запятой на точку
+                function safeParseFloat(value) {
+                    if (!value) return NaN;
+                    // Заменяем запятую на точку и удаляем пробелы
+                    const cleanValue = String(value).replace(/,/g, '.').replace(/\s/g, '');
+                    return parseFloat(cleanValue);
+                }
+                
+                // Получаем значения с безопасным парсингом
+                const p1_old = safeParseFloat(document.getElementById('p1_old').value) || 1.85;
+                const p2_old = safeParseFloat(document.getElementById('p2_old').value) || 2.05;
+                const p1_new = safeParseFloat(document.getElementById('p1_new').value) || 1.75;
+                const p2_new = safeParseFloat(document.getElementById('p2_new').value) || 2.20;
                 const w = parseFloat(wParam.value) || 1.5;
                 const t = parseFloat(timeFactor.value) || 1.2;
                 
@@ -2131,12 +2259,12 @@
                 
                 // Старые коэффициенты тоталов
                 const totals_old = {
-                    'tb25': parseFloat(document.getElementById('tb25_old').value) || 1.95,
-                    'tm25': parseFloat(document.getElementById('tm25_old').value) || 1.85,
-                    'tb35': parseFloat(document.getElementById('tb35_old').value) || 2.30,
-                    'tm35': parseFloat(document.getElementById('tm35_old').value) || 1.65,
-                    'tb15': parseFloat(document.getElementById('tb15_old').value) || 1.45,
-                    'tm15': parseFloat(document.getElementById('tm15_old').value) || 2.70
+                    'tb25': safeParseFloat(document.getElementById('tb25_old').value) || 1.95,
+                    'tm25': safeParseFloat(document.getElementById('tm25_old').value) || 1.85,
+                    'tb35': safeParseFloat(document.getElementById('tb35_old').value) || 2.30,
+                    'tm35': safeParseFloat(document.getElementById('tm35_old').value) || 1.65,
+                    'tb15': safeParseFloat(document.getElementById('tb15_old').value) || 1.45,
+                    'tm15': safeParseFloat(document.getElementById('tm15_old').value) || 2.70
                 };
                 
                 // Расчет маржи
@@ -2586,17 +2714,41 @@
             calculate();
             updateHistoryDisplay();
             
-            // Адаптация для iPhone
+            // Дополнительная iOS оптимизация
             if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
                 document.body.classList.add('ios-device');
                 
-                // Улучшение для виртуальной клавиатуры
-                const inputs = document.querySelectorAll('input[type="number"]');
+                // Предотвращение масштабирования при фокусе на input
+                document.addEventListener('focusin', function() {
+                    document.documentElement.style.zoom = '1';
+                });
+                
+                // Обработка клавиатуры iOS
+                let originalHeight = window.innerHeight;
+                
+                window.addEventListener('resize', function() {
+                    if (window.innerHeight < originalHeight) {
+                        // Клавиатура открыта
+                        document.body.classList.add('keyboard-open');
+                    } else {
+                        // Клавиатура закрыта
+                        document.body.classList.remove('keyboard-open');
+                    }
+                });
+                
+                // Улучшение скролла при фокусе
+                const inputs = document.querySelectorAll('input, select');
                 inputs.forEach(input => {
                     input.addEventListener('focus', function() {
                         setTimeout(() => {
-                            this.scrollIntoView({behavior: 'smooth', block: 'center'});
-                        }, 300);
+                            const rect = this.getBoundingClientRect();
+                            if (rect.bottom > window.innerHeight - 200) {
+                                this.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'center'
+                                });
+                            }
+                        }, 100);
                     });
                 });
             }
