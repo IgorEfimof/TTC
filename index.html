@@ -7,18 +7,80 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KTF1.1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Калькулятор тоталов</title>
+    <title>Калькулятор тоталов с историей</title>
     <style>
         :root {
             --primary: #1a2a6c;
             --secondary: #b21f1f;
+            --accent: #2980b9;
+            --warning: #f39c12;
+            --success: #27ae60;
             --light: #f8f9fa;
             --dark: #333;
-            --success: #28a745;
             --danger: #dc3545;
             --radius: 10px;
             --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             --transition: all 0.2s ease;
+            --bg-gradient: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 100%);
+            --card-bg: white;
+            --text-color: #333;
+            --border-color: #e1e5e9;
+        }
+        
+        /* Темная тема */
+        .theme-dark {
+            --bg-gradient: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            --card-bg: #2c3e50;
+            --text-color: #ecf0f1;
+            --border-color: #34495e;
+            --primary: #3498db;
+            --secondary: #e74c3c;
+            --accent: #9b59b6;
+            --warning: #f1c40f;
+            --success: #2ecc71;
+            --light: #34495e;
+            --dark: #ecf0f1;
+        }
+        
+        /* Светлая тема */
+        .theme-light {
+            --bg-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+            --border-color: #dfe6e9;
+            --primary: #0984e3;
+            --secondary: #d63031;
+            --accent: #00b894;
+            --warning: #fdcb6e;
+            --success: #00b894;
+            --light: #f5f6fa;
+            --dark: #2d3436;
+        }
+        
+        /* Синяя тема */
+        .theme-blue {
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --card-bg: #34495e;
+            --text-color: #ecf0f1;
+            --border-color: #41628a;
+            --primary: #3498db;
+            --secondary: #e74c3c;
+            --accent: #9b59b6;
+            --warning: #f1c40f;
+            --success: #2ecc71;
+        }
+        
+        /* Зеленая тема */
+        .theme-green {
+            --bg-gradient: linear-gradient(135deg, #1d976c 0%, #93f9b9 100%);
+            --card-bg: #2d3436;
+            --text-color: #dfe6e9;
+            --border-color: #636e72;
+            --primary: #00b894;
+            --secondary: #e17055;
+            --accent: #6c5ce7;
+            --warning: #fdcb6e;
+            --success: #00cec9;
         }
         
         * {
@@ -31,16 +93,16 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 100%);
-            color: var(--dark);
+            background: var(--bg-gradient);
+            color: var(--text-color);
             line-height: 1.4;
             min-height: 100vh;
             padding: 0;
             margin: 0;
             overflow-x: hidden;
+            transition: background 0.5s ease, color 0.3s ease;
         }
         
-        /* iPhone X+ safe area */
         .safe-area {
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
@@ -54,15 +116,20 @@
             padding: 0;
         }
         
-        /* Компактный хедер */
         header {
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             padding: 12px 16px;
             border-bottom: 3px solid var(--secondary);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
+        }
+        
+        .theme-dark header,
+        .theme-blue header,
+        .theme-green header {
+            background: rgba(44, 62, 80, 0.95);
         }
         
         h1 {
@@ -80,19 +147,57 @@
             margin-top: 2px;
         }
         
-        /* Компактные табы */
+        /* Переключатель тем */
+        .theme-switcher {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            display: flex;
+            gap: 6px;
+        }
+        
+        .theme-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .theme-btn.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+        }
+        
         .tabs {
             display: flex;
             background: white;
-            border-bottom: 1px solid #e1e5e9;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 73px;
             z-index: 90;
+            overflow-x: auto;
+        }
+        
+        .theme-dark .tabs,
+        .theme-blue .tabs,
+        .theme-green .tabs {
+            background: var(--card-bg);
         }
         
         .tab {
-            flex: 1;
-            padding: 12px 8px;
+            flex: 0 0 auto;
+            padding: 12px 16px;
             text-align: center;
             font-weight: 600;
             font-size: 0.85rem;
@@ -102,6 +207,7 @@
             cursor: pointer;
             transition: var(--transition);
             border-bottom: 3px solid transparent;
+            white-space: nowrap;
         }
         
         .tab.active {
@@ -118,20 +224,19 @@
             display: block;
         }
         
-        /* Основной контент */
         .content {
             padding: 16px;
             padding-bottom: 20px;
         }
         
-        /* Компактные карточки */
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius);
             padding: 16px;
             margin-bottom: 16px;
             box-shadow: var(--shadow);
-            border: 1px solid #e1e5e9;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         
         .card-title {
@@ -144,7 +249,149 @@
             gap: 8px;
         }
         
-        /* Компактный ввод - 2 колонки */
+        /* Временной анализ */
+        .time-analysis {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .time-period {
+            background: linear-gradient(135deg, var(--light) 0%, var(--border-color) 100%);
+            border-radius: 8px;
+            padding: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .time-period.active {
+            border-color: var(--secondary);
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.2) 100%);
+        }
+        
+        .time-period.recommended {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(46, 204, 113, 0.2) 100%);
+        }
+        
+        .period-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        
+        .period-range {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-bottom: 6px;
+        }
+        
+        .period-profit {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+        
+        .period-risk {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--danger);
+        }
+        
+        /* Тренд визуализация */
+        .trend-container {
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .trend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .trend-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .trend-value {
+            font-weight: 800;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .trend-bar {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 6px;
+            position: relative;
+        }
+        
+        .trend-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .trend-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #666;
+        }
+        
+        .theme-dark .trend-labels,
+        .theme-blue .trend-labels,
+        .theme-green .trend-labels {
+            color: #aaa;
+        }
+        
+        /* Ввод коэффициентов с временем */
+        .input-grid-time {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .time-input-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .time-input-item label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+            white-space: nowrap;
+        }
+        
+        .time-input-item input,
+        .time-input-item select {
+            width: 100%;
+            padding: 10px 8px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: 600;
+            background: var(--light);
+            color: var(--text-color);
+            min-height: 42px;
+        }
+        
         .input-grid-2 {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -167,23 +414,16 @@
         .input-item input {
             width: 100%;
             padding: 10px 8px;
-            border: 1.5px solid #d1d9e6;
+            border: 1.5px solid var(--border-color);
             border-radius: 8px;
             font-size: 0.95rem;
             text-align: center;
             font-weight: 600;
-            background: #f8fafc;
+            background: var(--light);
+            color: var(--text-color);
             min-height: 42px;
-            -webkit-appearance: none;
         }
         
-        .input-item input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: white;
-        }
-        
-        /* Сетка тоталов - 3 колонки */
         .totals-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -208,16 +448,16 @@
         .total-item input {
             width: 100%;
             padding: 8px;
-            border: 1.5px solid #d1d9e6;
+            border: 1.5px solid var(--border-color);
             border-radius: 8px;
             font-size: 0.9rem;
             text-align: center;
             font-weight: 600;
-            background: #f8fafc;
+            background: var(--light);
+            color: var(--text-color);
             min-height: 38px;
         }
         
-        /* Слайдер компактный */
         .slider-container {
             padding: 8px 0;
         }
@@ -253,13 +493,12 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: white;
+            background: var(--card-bg);
             border: 3px solid var(--primary);
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
         
-        /* Кнопка расчета */
         .calculate-btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -272,16 +511,15 @@
             transition: var(--transition);
             width: 100%;
             margin: 20px 0 12px;
-            box-shadow: 0 4px 12px rgba(26, 42, 108, 0.3);
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
             min-height: 48px;
         }
         
         .calculate-btn:active {
             transform: translateY(1px);
-            box-shadow: 0 2px 6px rgba(26, 42, 108, 0.2);
+            box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.2);
         }
         
-        /* Кнопки действий */
         .action-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -301,9 +539,9 @@
         }
         
         .action-btn.reset {
-            background: #f8f9fa;
+            background: var(--light);
             color: var(--primary);
-            border: 1.5px solid #dee2e6;
+            border: 1.5px solid var(--border-color);
         }
         
         .action-btn.share {
@@ -311,7 +549,12 @@
             color: white;
         }
         
-        /* Результаты - компактные карточки */
+        .action-btn.bet {
+            background: linear-gradient(135deg, var(--success) 0%, #1e8449 100%);
+            color: white;
+        }
+        
+        /* Результаты */
         .results-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -320,17 +563,23 @@
         }
         
         .result-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 8px;
             padding: 12px;
             text-align: center;
-            border: 1.5px solid #e1e5e9;
+            border: 1.5px solid var(--border-color);
         }
         
         .result-card .label {
             font-size: 0.75rem;
             color: #666;
             margin-bottom: 4px;
+        }
+        
+        .theme-dark .result-card .label,
+        .theme-blue .result-card .label,
+        .theme-green .result-card .label {
+            color: #aaa;
         }
         
         .result-card .value {
@@ -345,7 +594,6 @@
             margin-top: 2px;
         }
         
-        /* Новые коэффициенты - сетка 3x2 */
         .new-totals {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -354,11 +602,11 @@
         }
         
         .new-total-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, var(--light) 0%, var(--border-color) 100%);
             border-radius: 8px;
             padding: 12px 8px;
             text-align: center;
-            border: 1.5px solid #dee2e6;
+            border: 1.5px solid var(--border-color);
             position: relative;
             overflow: hidden;
         }
@@ -388,6 +636,12 @@
             margin-bottom: 2px;
         }
         
+        .theme-dark .old-coef,
+        .theme-blue .old-coef,
+        .theme-green .old-coef {
+            color: #aaa;
+        }
+        
         .new-coef {
             font-size: 1rem;
             font-weight: 800;
@@ -404,22 +658,21 @@
         }
         
         .positive {
-            background: rgba(40, 167, 69, 0.15);
-            color: #28a745;
+            background: rgba(46, 204, 113, 0.15);
+            color: var(--success);
         }
         
         .negative {
-            background: rgba(220, 53, 69, 0.15);
-            color: #dc3545;
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--danger);
         }
         
-        /* Сводка компактная */
         .summary {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius);
             padding: 16px;
             margin-top: 16px;
-            border: 1.5px solid #e1e5e9;
+            border: 1.5px solid var(--border-color);
         }
         
         .summary-title {
@@ -433,7 +686,7 @@
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--border-color);
             font-size: 0.85rem;
         }
         
@@ -443,7 +696,8 @@
         
         .summary-item .label {
             font-weight: 600;
-            color: #555;
+            color: var(--text-color);
+            opacity: 0.8;
         }
         
         .summary-item .value {
@@ -451,13 +705,341 @@
             color: var(--primary);
         }
         
-        /* Информационная панель */
+        /* Рекомендации по ставкам */
+        .bet-recommendation {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(46, 204, 113, 0.2) 100%);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin: 16px 0;
+            border: 2px solid var(--success);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+        
+        .bet-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .bet-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .bet-title {
+            color: var(--success);
+            font-size: 1rem;
+            font-weight: 700;
+            flex: 1;
+        }
+        
+        .bet-confidence {
+            background: var(--success);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .bet-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .bet-detail {
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .bet-detail .label {
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        .theme-dark .bet-detail .label,
+        .theme-blue .bet-detail .label,
+        .theme-green .bet-detail .label {
+            color: #aaa;
+        }
+        
+        .bet-detail .value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .bet-reason {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: var(--text-color);
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .theme-dark .bet-reason,
+        .theme-blue .bet-reason,
+        .theme-green .bet-reason {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Стили для альтернативных рекомендаций */
+        .alternative-bets {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .alt-bet {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1.5px solid var(--border-color);
+            text-align: center;
+        }
+        
+        .alt-bet .name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+        
+        .alt-bet .coef {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 4px;
+        }
+        
+        .alt-bet .potential {
+            font-size: 0.7rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        /* История ставок */
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+        
+        .history-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .history-item.win {
+            border-left: 4px solid var(--success);
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, var(--card-bg) 100%);
+        }
+        
+        .history-item.loss {
+            border-left: 4px solid var(--danger);
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, var(--card-bg) 100%);
+        }
+        
+        .history-item.pending {
+            border-left: 4px solid var(--warning);
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.1) 0%, var(--card-bg) 100%);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .history-date {
+            font-size: 0.7rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .history-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .status-win {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+        
+        .status-loss {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+        
+        .status-pending {
+            background: rgba(241, 196, 15, 0.2);
+            color: var(--warning);
+        }
+        
+        .history-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .history-detail {
+            text-align: center;
+        }
+        
+        .history-detail .label {
+            font-size: 0.65rem;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        
+        .theme-dark .history-detail .label,
+        .theme-blue .history-detail .label,
+        .theme-green .history-detail .label {
+            color: #aaa;
+        }
+        
+        .history-detail .value {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .history-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .history-btn {
+            flex: 1;
+            padding: 6px;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .history-btn.win {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .history-btn.loss {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .history-btn.delete {
+            background: rgba(149, 165, 166, 0.2);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .history-btn:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+        
+        .history-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #666;
+        }
+        
+        .theme-dark .stat-label,
+        .theme-blue .stat-label,
+        .theme-green .stat-label {
+            color: #aaa;
+        }
+        
+        /* Баннеры */
+        .time-recommendation {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.2) 100%);
+            border-radius: 8px;
+            padding: 14px;
+            margin: 16px 0;
+            border: 2px solid var(--accent);
+        }
+        
+        .recommendation-title {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .recommendation-text {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: var(--text-color);
+        }
+        
+        /* Информация */
         .info-panel {
-            background: rgba(26, 42, 108, 0.05);
+            background: rgba(var(--primary-rgb), 0.05);
             border-radius: var(--radius);
             padding: 16px;
             margin-top: 16px;
-            border: 1.5px solid rgba(26, 42, 108, 0.1);
+            border: 1.5px solid rgba(var(--primary-rgb), 0.1);
         }
         
         .info-title {
@@ -470,12 +1052,11 @@
         .info-text {
             font-size: 0.85rem;
             line-height: 1.4;
-            color: #555;
+            color: var(--text-color);
         }
         
-        /* Формула */
         .formula {
-            background: #f8f9fa;
+            background: var(--light);
             padding: 12px;
             border-radius: 8px;
             margin: 12px 0;
@@ -485,7 +1066,6 @@
             border-left: 3px solid var(--secondary);
         }
         
-        /* Футер */
         footer {
             text-align: center;
             padding: 16px;
@@ -495,11 +1075,27 @@
             margin-top: 20px;
         }
         
-        /* Адаптация для маленьких экранов */
+        /* Иконки */
+        .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .icon-clock { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a2a6c'%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z'/%3E%3C/svg%3E"); }
+        .icon-trend-up { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2327ae60'%3E%3Cpath d='M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z'/%3E%3C/svg%3E"); }
+        .icon-trend-down { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23dc3545'%3E%3Cpath d='M16 18l2.29-2.29-4.88-4.88-4 4L2 7.41 3.41 6l6 6 4-4 6.3 6.29L22 12v6z'/%3E%3C/svg%3E"); }
+        .icon-warning { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E"); }
+        .icon-check { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2327ae60'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E"); }
+        .icon-moon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1c40f'%3E%3Cpath d='M9.37 5.51A7.35 7.35 0 0 0 9.1 7.5c0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27A7.014 7.014 0 0 1 12 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49z'/%3E%3C/svg%3E"); }
+        .icon-sun { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79zM1 10.5h3v2H1zM11 .55h2V3.5h-2zm8.04 2.495l1.408 1.407-1.79 1.79-1.407-1.408zm-1.8 15.115l1.79 1.8 1.41-1.41-1.8-1.79zM20 10.5h3v2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-1 4h2v2.95h-2zm-7.45-.96l1.41 1.41 1.79-1.8-1.41-1.41z'/%3E%3C/svg%3E"); }
+        
         @media (max-width: 360px) {
-            .input-grid-2 {
+            .input-grid-2,
+            .input-grid-time {
                 grid-template-columns: 1fr;
-                gap: 10px;
             }
             
             .totals-grid,
@@ -514,9 +1110,28 @@
             .action-buttons {
                 grid-template-columns: 1fr;
             }
+            
+            .time-analysis {
+                grid-template-columns: 1fr;
+            }
+            
+            .bet-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .alternative-bets {
+                grid-template-columns: 1fr;
+            }
+            
+            .history-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .history-stats {
+                grid-template-columns: 1fr;
+            }
         }
         
-        /* Адаптация для высоты */
         @media (max-height: 700px) {
             .content {
                 padding: 12px;
@@ -532,7 +1147,6 @@
             }
         }
         
-        /* Улучшение для iPhone в landscape */
         @media (orientation: landscape) and (max-height: 500px) {
             header {
                 position: relative;
@@ -546,18 +1160,8 @@
             .content {
                 padding: 8px 16px;
             }
-            
-            .input-grid-2 {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 8px;
-            }
-            
-            .totals-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
         }
         
-        /* Индикатор свайпа */
         .swipe-indicator {
             text-align: center;
             padding: 6px;
@@ -572,7 +1176,6 @@
             }
         }
         
-        /* Анимации */
         .fade-in {
             animation: fadeIn 0.3s ease forwards;
         }
@@ -582,14 +1185,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Улучшения для касания */
-        button, input, .tab {
-            cursor: pointer;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        
-        /* Скрытие стрелок у number input на iPhone */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -599,19 +1194,31 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
-        
-        /* Улучшенный фокус */
-        *:focus {
-            outline: none;
-        }
     </style>
 </head>
-<body>
+<body class="theme-default">
     <div class="safe-area">
         <div class="container">
             <header>
-                <h1>Калькулятор тоталов</h1>
-                <p class="subtitle">Корректировка коэффициентов при изменении П1/П2</p>
+                <h1>Калькулятор тоталов с историей</h1>
+                <p class="subtitle">Рекомендации + история ставок + смена тем</p>
+                <div class="theme-switcher">
+                    <button class="theme-btn active" data-theme="default" title="Стандартная тема">
+                        🌈
+                    </button>
+                    <button class="theme-btn" data-theme="dark" title="Темная тема">
+                        🌙
+                    </button>
+                    <button class="theme-btn" data-theme="light" title="Светлая тема">
+                        ☀️
+                    </button>
+                    <button class="theme-btn" data-theme="blue" title="Синяя тема">
+                        🔵
+                    </button>
+                    <button class="theme-btn" data-theme="green" title="Зеленая тема">
+                        🟢
+                    </button>
+                </div>
             </header>
             
             <div class="swipe-indicator">
@@ -620,7 +1227,10 @@
             
             <div class="tabs">
                 <button class="tab active" data-tab="input">Ввод</button>
-                <button class="tab" data-tab="results">Результаты</button>
+                <button class="tab" data-tab="time-analysis">Время</button>
+                <button class="tab" data-tab="results">Расчет</button>
+                <button class="tab" data-tab="bets">Рекомендации</button>
+                <button class="tab" data-tab="history">История</button>
                 <button class="tab" data-tab="info">Инфо</button>
             </div>
             
@@ -628,24 +1238,61 @@
             <div id="input" class="tab-content active">
                 <div class="content">
                     <div class="card">
-                        <div class="card-title">Основные коэффициенты</div>
-                        <div class="input-grid-2">
+                        <div class="card-title"><span class="icon icon-clock"></span> Временные коэффициенты</div>
+                        <div class="input-grid-time">
+                            <div class="time-input-item">
+                                <label>Старый коэф. время</label>
+                                <select id="time_old_period">
+                                    <option value="prematch">Прематч</option>
+                                    <option value="1-15" selected>1-15 мин</option>
+                                    <option value="16-30">16-30 мин</option>
+                                    <option value="31-45">31-45 мин</option>
+                                    <option value="46-60">46-60 мин</option>
+                                    <option value="61-75">61-75 мин</option>
+                                    <option value="76-90">76-90 мин</option>
+                                </select>
+                            </div>
                             <div class="input-item">
                                 <label>П1 старый</label>
                                 <input type="number" id="p1_old" step="0.01" min="1.01" value="1.85" placeholder="1.85">
+                            </div>
+                            <div class="input-item">
+                                <label>П2 старый</label>
+                                <input type="number" id="p2_old" step="0.01" min="1.01" value="2.05" placeholder="2.05">
+                            </div>
+                        </div>
+                        
+                        <div class="input-grid-time" style="margin-top: 12px;">
+                            <div class="time-input-item">
+                                <label>Новый коэф. время</label>
+                                <select id="time_new_period">
+                                    <option value="prematch">Прематч</option>
+                                    <option value="1-15">1-15 мин</option>
+                                    <option value="16-30" selected>16-30 мин</option>
+                                    <option value="31-45">31-45 мин</option>
+                                    <option value="46-60">46-60 мин</option>
+                                    <option value="61-75">61-75 мин</option>
+                                    <option value="76-90">76-90 мин</option>
+                                </select>
                             </div>
                             <div class="input-item">
                                 <label>П1 новый</label>
                                 <input type="number" id="p1_new" step="0.01" min="1.01" value="1.75" placeholder="1.75">
                             </div>
                             <div class="input-item">
-                                <label>П2 старый</label>
-                                <input type="number" id="p2_old" step="0.01" min="1.01" value="2.05" placeholder="2.05">
-                            </div>
-                            <div class="input-item">
                                 <label>П2 новый</label>
                                 <input type="number" id="p2_new" step="0.01" min="1.01" value="2.20" placeholder="2.20">
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="time-recommendation">
+                        <div class="recommendation-title">
+                            <span class="icon icon-check"></span>
+                            Оптимальное время для ставки: 16-30 минута
+                        </div>
+                        <div class="recommendation-text">
+                            В этот период виден тренд матча, коэффициенты стабильны, а букмекерская маржа минимальна.
                         </div>
                     </div>
                     
@@ -688,10 +1335,17 @@
                             </div>
                             <input type="range" id="w_param" min="0" max="3" step="0.1" value="1.5">
                         </div>
+                        <div class="slider-container" style="margin-top: 16px;">
+                            <div class="slider-label">
+                                <span>Временной фактор:</span>
+                                <span id="time_factor_value">1.2</span>
+                            </div>
+                            <input type="range" id="time_factor" min="0.5" max="2" step="0.1" value="1.2">
+                        </div>
                     </div>
                     
                     <button class="calculate-btn" id="calculate-btn">
-                        РАССЧИТАТЬ
+                        РАССЧИТАТЬ РЕКОМЕНДАЦИИ
                     </button>
                     
                     <div class="action-buttons">
@@ -705,12 +1359,125 @@
                 </div>
             </div>
             
-            <!-- Вкладка результатов -->
+            <!-- Вкладка временного анализа -->
+            <div id="time-analysis" class="tab-content">
+                <div class="content">
+                    <div class="card">
+                        <div class="card-title"><span class="icon icon-clock"></span> Анализ временных периодов</div>
+                        <div class="time-analysis">
+                            <div class="time-period" data-period="prematch">
+                                <div class="period-name">Прематч</div>
+                                <div class="period-range">До начала</div>
+                                <div class="period-risk">Не рекомендую</div>
+                            </div>
+                            <div class="time-period active" data-period="1-15">
+                                <div class="period-name">1-15 мин</div>
+                                <div class="period-range">1-й тайм начало</div>
+                                <div class="period-profit">Средняя ставка</div>
+                            </div>
+                            <div class="time-period recommended" data-period="16-30">
+                                <div class="period-name">16-30 мин</div>
+                                <div class="period-range">1-й тайм середина</div>
+                                <div class="period-profit">ЛУЧШИЙ ПЕРИОД</div>
+                            </div>
+                            <div class="time-period" data-period="31-45">
+                                <div class="period-name">31-45 мин</div>
+                                <div class="period-range">1-й тайм конец</div>
+                                <div class="period-risk">Риск: Средний</div>
+                            </div>
+                            <div class="time-period" data-period="46-60">
+                                <div class="period-name">46-60 мин</div>
+                                <div class="period-range">2-й тайм начало</div>
+                                <div class="period-profit">Хорошая ставка</div>
+                            </div>
+                            <div class="time-period" data-period="61-75">
+                                <div class="period-name">61-75 мин</div>
+                                <div class="period-range">2-й тайм середина</div>
+                                <div class="period-risk">Риск: Низкий</div>
+                            </div>
+                            <div class="time-period" data-period="76-90">
+                                <div class="period-name">76-90 мин</div>
+                                <div class="period-range">2-й тайм конец</div>
+                                <div class="period-risk">Очень рискованно</div>
+                            </div>
+                        </div>
+                        
+                        <div class="trend-container">
+                            <div class="trend-header">
+                                <div class="trend-title">Тренд коэффициентов П1</div>
+                                <div class="trend-value">▼ 5.4%</div>
+                            </div>
+                            <div class="trend-bar">
+                                <div class="trend-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="trend-labels">
+                                <span>Прематч</span>
+                                <span>1-й тайм</span>
+                                <span>2-й тайм</span>
+                            </div>
+                        </div>
+                        
+                        <div class="trend-container">
+                            <div class="trend-header">
+                                <div class="trend-title">Тренд коэффициентов П2</div>
+                                <div class="trend-value">▲ 7.2%</div>
+                            </div>
+                            <div class="trend-bar">
+                                <div class="trend-fill" style="width: 72%;"></div>
+                            </div>
+                            <div class="trend-labels">
+                                <span>Прематч</span>
+                                <span>1-й тайм</span>
+                                <span>2-й тайм</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Рекомендации по времени ставок</div>
+                        <div style="font-size: 0.85rem; line-height: 1.4; color: var(--text-color);">
+                            <div style="margin-bottom: 10px; padding: 10px; background: rgba(46, 204, 113, 0.1); border-radius: 8px;">
+                                <strong>⭐ ЛУЧШЕЕ ВРЕМЯ: 16-30 минута</strong><br>
+                                Почему: Виден тренд, стабильные коэффициенты, низкая маржа
+                            </div>
+                            <div style="margin-bottom: 10px; padding: 10px; background: rgba(241, 196, 15, 0.1); border-radius: 8px;">
+                                <strong>Хорошее время: 46-60 минута</strong><br>
+                                Почему: Второй тайм начался, видна тактика команд
+                            </div>
+                            <div style="margin-bottom: 10px; padding: 10px; background: rgba(231, 76, 60, 0.1); border-radius: 8px;">
+                                <strong>Избегать: Прематч и 76-90 мин</strong><br>
+                                Почему: Высокая маржа или слишком высокий риск
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn reset" id="apply-time-btn">
+                            Применить период
+                        </button>
+                        <button class="action-btn share" id="time-back-btn">
+                            Назад к вводу
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Вкладка расчетов -->
             <div id="results" class="tab-content">
                 <div class="content">
                     <div class="card">
-                        <div class="card-title">Анализ маржи</div>
+                        <div class="card-title">Анализ с учетом времени</div>
                         <div class="results-grid">
+                            <div class="result-card">
+                                <div class="label">Временной период</div>
+                                <div class="value" id="time_period">1-15 → 16-30</div>
+                                <div class="sub-value">мин</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="label">Временной фактор</div>
+                                <div class="value" id="time_factor_display">1.2x</div>
+                                <div class="sub-value">коррекция</div>
+                            </div>
                             <div class="result-card">
                                 <div class="label">Маржа была</div>
                                 <div class="value" id="r_old">1.055</div>
@@ -720,16 +1487,6 @@
                                 <div class="label">Маржа стала</div>
                                 <div class="value" id="r_new">1.064</div>
                                 <div class="sub-value">R_new</div>
-                            </div>
-                            <div class="result-card">
-                                <div class="label">Изменение</div>
-                                <div class="value" id="margin_change">+0.85%</div>
-                                <div class="sub-value">Δ маржа</div>
-                            </div>
-                            <div class="result-card">
-                                <div class="label">Корректировка</div>
-                                <div class="value" id="correction_factor">1.013</div>
-                                <div class="sub-value">Коэфф.</div>
                             </div>
                         </div>
                     </div>
@@ -777,7 +1534,7 @@
                     </div>
                     
                     <div class="summary">
-                        <div class="summary-title">Сводка изменений</div>
+                        <div class="summary-title">Анализ изменений</div>
                         <div class="summary-item">
                             <div class="label">Среднее изменение:</div>
                             <div class="value" id="avg_change">+0.026</div>
@@ -791,17 +1548,159 @@
                             <div class="value" id="min_change">ТМ 3.5 (+0.022)</div>
                         </div>
                         <div class="summary-item">
-                            <div class="label">Рекомендация:</div>
-                            <div class="value" id="recommendation">Следить за ТМ 3.5</div>
+                            <div class="label">Временная эффективность:</div>
+                            <div class="value" id="efficiency">87%</div>
                         </div>
                     </div>
                     
                     <div class="action-buttons">
-                        <button class="action-btn reset" id="back-btn">
+                        <button class="action-btn reset" id="results-back-btn">
                             Назад к вводу
                         </button>
-                        <button class="action-btn share" id="results-share-btn">
-                            Поделиться
+                        <button class="action-btn bet" id="go-to-bets-btn">
+                            Показать рекомендации
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Вкладка рекомендаций по ставкам -->
+            <div id="bets" class="tab-content">
+                <div class="content">
+                    <div class="bet-recommendation">
+                        <div class="bet-header">
+                            <div class="bet-icon">⭐</div>
+                            <div class="bet-title">ГЛАВНАЯ РЕКОМЕНДАЦИЯ</div>
+                            <div class="bet-confidence">85%</div>
+                        </div>
+                        
+                        <div class="bet-details">
+                            <div class="bet-detail">
+                                <div class="label">Ставка</div>
+                                <div class="value" id="bet_main_name">ТМ 1.5</div>
+                            </div>
+                            <div class="bet-detail">
+                                <div class="label">Коэффициент</div>
+                                <div class="value" id="bet_main_coef">2.736</div>
+                            </div>
+                            <div class="bet-detail">
+                                <div class="label">Время ставки</div>
+                                <div class="value" id="bet_main_time">20-25 мин</div>
+                            </div>
+                            <div class="bet-detail">
+                                <div class="label">Потенциальная прибыль</div>
+                                <div class="value" id="bet_main_profit">+36%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bet-reason" id="bet_main_reason">
+                            Наибольший рост коэффициента (+0.036) в выбранный период. Коэффициент вырос на 1.3%, что указывает на переоценку букмекером вероятности малого количества голов.
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Альтернативные ставки</div>
+                        <div class="alternative-bets">
+                            <div class="alt-bet">
+                                <div class="name" id="bet_alt1_name">ТБ 3.5</div>
+                                <div class="coef" id="bet_alt1_coef">2.330</div>
+                                <div class="potential" id="bet_alt1_potential">+30</div>
+                            </div>
+                            <div class="alt-bet">
+                                <div class="name" id="bet_alt2_name">ТБ 2.5</div>
+                                <div class="coef" id="bet_alt2_coef">1.975</div>
+                                <div class="potential" id="bet_alt2_potential">+25</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 16px; font-size: 0.8rem; color: var(--text-color);">
+                            <strong>Стратегия:</strong> 
+                            <span id="bet_strategy">Делать ставку на 20-25 минуте при коэффициенте выше 2.70</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Детали рекомендации</div>
+                        <div class="summary">
+                            <div class="summary-item">
+                                <div class="label">Оптимальный период:</div>
+                                <div class="value" id="bet_optimal_period">16-30 минута</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">Лучшее время для входа:</div>
+                                <div class="value" id="bet_best_time">20-25 минута</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">Рекомендуемый размер ставки:</div>
+                                <div class="value" id="bet_size">2-3% от банка</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">Ожидаемая точность:</div>
+                                <div class="value" id="bet_accuracy">±3.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn reset" id="bets-back-btn">
+                            Назад к расчетам
+                        </button>
+                        <button class="action-btn bet" id="save-bet-btn">
+                            Сохранить в историю
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Вкладка истории -->
+            <div id="history" class="tab-content">
+                <div class="content">
+                    <div class="card">
+                        <div class="card-title">Статистика ставок</div>
+                        <div class="history-stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="total-bets">0</div>
+                                <div class="stat-label">Всего ставок</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="win-rate">0%</div>
+                                <div class="stat-label">Процент побед</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="total-profit">0</div>
+                                <div class="stat-label">Общая прибыль</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">История сохраненных ставок</div>
+                        <div id="empty-history" style="text-align: center; padding: 40px 20px; color: #666;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+                            <div style="font-size: 0.9rem; margin-bottom: 8px;">История ставок пуста</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Сохраняйте рекомендации и отмечайте результаты</div>
+                        </div>
+                        <div class="history-list" id="history-list">
+                            <!-- История будет загружаться здесь -->
+                        </div>
+                    </div>
+                    
+                    <div class="time-recommendation">
+                        <div class="recommendation-title">
+                            <span class="icon icon-warning"></span>
+                            Анализ эффективности
+                        </div>
+                        <div class="recommendation-text">
+                            Регулярно просматривайте историю ставок, анализируйте ошибки и корректируйте стратегию.
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn reset" id="clear-history-btn">
+                            Очистить историю
+                        </button>
+                        <button class="action-btn share" id="history-back-btn">
+                            Назад к рекомендациям
                         </button>
                     </div>
                 </div>
@@ -811,30 +1710,53 @@
             <div id="info" class="tab-content">
                 <div class="content">
                     <div class="info-panel">
-                        <div class="info-title">Как работает калькулятор</div>
+                        <div class="info-title">Как работают рекомендации</div>
                         <div class="info-text">
-                            При изменении коэффициентов на П1 и П2 букмекер корректирует тоталы, чтобы сохранить свою маржу. Этот калькулятор помогает понять логику изменений.
+                            Система анализирует изменение коэффициентов во времени и определяет оптимальные моменты для ставок на основе математической модели.
                         </div>
                     </div>
                     
                     <div class="card">
-                        <div class="card-title">Формула расчета</div>
-                        <div class="formula">
-                            K<sub>новый</sub> = K<sub>старый</sub> × (R<sub>новый</sub>/R<sub>старый</sub>)<sup>w</sup>
-                        </div>
-                        <div style="font-size: 0.85rem; line-height: 1.4; color: #555;">
-                            <div style="margin-bottom: 8px;"><strong>R = 1/П1 + 1/П2</strong> - показатель маржи</div>
-                            <div><strong>w</strong> - параметр влияния (0-3)</div>
+                        <div class="card-title">Критерии рекомендаций</div>
+                        <div style="font-size: 0.85rem; line-height: 1.4; color: var(--text-color);">
+                            <div style="margin-bottom: 8px; padding-left: 16px; border-left: 3px solid var(--success);">
+                                <strong>Главная рекомендация:</strong><br>
+                                • Наибольшее изменение коэффициента<br>
+                                • Коэффициент выше 1.8<br>
+                                • Оптимальный временной период
+                            </div>
+                            <div style="margin-bottom: 8px; padding-left: 16px; border-left: 3px solid var(--accent);">
+                                <strong>Альтернативные ставки:</strong><br>
+                                • Второе и третье по величине изменения<br>
+                                • Хорошее соотношение риск/прибыль
+                            </div>
+                            <div style="padding-left: 16px; border-left: 3px solid var(--warning);">
+                                <strong>Время ставки:</strong><br>
+                                • 16-30 минута - оптимально<br>
+                                • 46-60 минута - хорошо<br>
+                                • Избегать конца таймов
+                            </div>
                         </div>
                     </div>
                     
                     <div class="card">
-                        <div class="card-title">Параметр w</div>
-                        <div style="font-size: 0.85rem; line-height: 1.4; color: #555;">
-                            <div style="margin-bottom: 6px;">• <strong>w = 0</strong> — тоталы не меняются</div>
-                            <div style="margin-bottom: 6px;">• <strong>w = 1</strong> — линейная корректировка</div>
-                            <div style="margin-bottom: 6px;">• <strong>w = 2</strong> — квадратичная зависимость</div>
-                            <div>• <strong>w = 3</strong> — сильное влияние</div>
+                        <div class="card-title">Стратегия ставок</div>
+                        <div style="font-size: 0.85rem; line-height: 1.4; color: var(--text-color);">
+                            <div style="margin-bottom: 8px;">
+                                1. <strong>Анализ прематча:</strong> Изучите начальные коэффициенты
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                2. <strong>Наблюдение 1-15 мин:</strong> Следите за изменением коэффициентов
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                3. <strong>Ставка 16-30 мин:</strong> Оптимальное время для входа
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                4. <strong>Контроль 31-45 мин:</strong> При необходимости коррекция
+                            </div>
+                            <div>
+                                5. <strong>Анализ результата:</strong> Учитесь на успехах и ошибках
+                            </div>
                         </div>
                     </div>
                     
@@ -847,8 +1769,8 @@
             </div>
             
             <footer>
-                <p>© 2023 Калькулятор тоталов</p>
-                <p style="font-size: 0.7rem; opacity: 0.7; margin-top: 2px;">Адаптировано для iPhone</p>
+                <p>© 2023 Калькулятор тоталов с историей ставок</p>
+                <p style="font-size: 0.7rem; opacity: 0.7; margin-top: 2px;">Ставки делайте ответственно. 18+</p>
             </footer>
         </div>
     </div>
@@ -859,21 +1781,97 @@
             const tabs = document.querySelectorAll('.tab');
             const calculateBtn = document.getElementById('calculate-btn');
             const resetBtn = document.getElementById('reset-btn');
-            const backBtn = document.getElementById('back-btn');
+            const backBtn = document.getElementById('results-back-btn');
             const infoBackBtn = document.getElementById('info-back-btn');
+            const timeBackBtn = document.getElementById('time-back-btn');
+            const betsBackBtn = document.getElementById('bets-back-btn');
+            const historyBackBtn = document.getElementById('history-back-btn');
+            const applyTimeBtn = document.getElementById('apply-time-btn');
+            const goToBetsBtn = document.getElementById('go-to-bets-btn');
+            const saveBetBtn = document.getElementById('save-bet-btn');
+            const clearHistoryBtn = document.getElementById('clear-history-btn');
             const wParam = document.getElementById('w_param');
             const wValue = document.getElementById('w_value');
+            const timeFactor = document.getElementById('time_factor');
+            const timeFactorValue = document.getElementById('time_factor_value');
+            const timePeriods = document.querySelectorAll('.time-period');
+            const themeBtns = document.querySelectorAll('.theme-btn');
+            
+            // Хранилище данных
+            let betsHistory = JSON.parse(localStorage.getItem('betsHistory') || '[]');
+            let currentTheme = localStorage.getItem('theme') || 'default';
+            
+            // Инициализация темы
+            document.body.className = `theme-${currentTheme}`;
+            themeBtns.forEach(btn => {
+                if (btn.dataset.theme === currentTheme) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Временные периоды и их характеристики
+            const periodData = {
+                'prematch': { 
+                    risk: 'Высокий', 
+                    volatility: 'Низкая', 
+                    efficiency: 65,
+                    recommendation: 'Избегать',
+                    bestTime: 'непосредственно перед началом'
+                },
+                '1-15': { 
+                    risk: 'Средний', 
+                    volatility: 'Средняя', 
+                    efficiency: 78,
+                    recommendation: 'Наблюдать',
+                    bestTime: '10-12 минута'
+                },
+                '16-30': { 
+                    risk: 'Низкий', 
+                    volatility: 'Оптимальная', 
+                    efficiency: 92,
+                    recommendation: 'ЛУЧШИЙ ПЕРИОД',
+                    bestTime: '20-25 минута'
+                },
+                '31-45': { 
+                    risk: 'Высокий', 
+                    volatility: 'Высокая', 
+                    efficiency: 72,
+                    recommendation: 'Осторожно',
+                    bestTime: '35-40 минута'
+                },
+                '46-60': { 
+                    risk: 'Средний', 
+                    volatility: 'Высокая', 
+                    efficiency: 81,
+                    recommendation: 'Хорошая ставка',
+                    bestTime: '50-55 минута'
+                },
+                '61-75': { 
+                    risk: 'Низкий', 
+                    volatility: 'Средняя', 
+                    efficiency: 76,
+                    recommendation: 'Средняя ставка',
+                    bestTime: '65-70 минута'
+                },
+                '76-90': { 
+                    risk: 'Очень высокий', 
+                    volatility: 'Очень высокая', 
+                    efficiency: 58,
+                    recommendation: 'Избегать',
+                    bestTime: '80-85 минута'
+                }
+            };
             
             // Управление вкладками
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabId = tab.getAttribute('data-tab');
                     
-                    // Убираем активный класс
                     tabs.forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
                     
-                    // Добавляем активный класс
                     tab.classList.add('active');
                     document.getElementById(tabId).classList.add('active');
                     document.getElementById(tabId).classList.add('fade-in');
@@ -881,12 +1879,135 @@
                     setTimeout(() => {
                         document.getElementById(tabId).classList.remove('fade-in');
                     }, 300);
+                    
+                    // При переходе на вкладку истории обновляем ее
+                    if (tabId === 'history') {
+                        updateHistoryDisplay();
+                    }
                 });
             });
+            
+            // Смена темы
+            themeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const theme = this.dataset.theme;
+                    
+                    // Убираем активный класс со всех кнопок
+                    themeBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Добавляем активный класс текущей кнопке
+                    this.classList.add('active');
+                    
+                    // Меняем тему
+                    document.body.className = `theme-${theme}`;
+                    currentTheme = theme;
+                    
+                    // Сохраняем в localStorage
+                    localStorage.setItem('theme', theme);
+                    
+                    // Показываем уведомление
+                    showNotification(`Тема изменена: ${getThemeName(theme)}`);
+                });
+            });
+            
+            function getThemeName(theme) {
+                const names = {
+                    'default': 'Стандартная',
+                    'dark': 'Темная',
+                    'light': 'Светлая',
+                    'blue': 'Синяя',
+                    'green': 'Зеленая'
+                };
+                return names[theme] || theme;
+            }
+            
+            // Выбор временного периода
+            timePeriods.forEach(period => {
+                period.addEventListener('click', function() {
+                    timePeriods.forEach(p => {
+                        p.classList.remove('active');
+                        p.classList.remove('recommended');
+                    });
+                    
+                    this.classList.add('active');
+                    const periodName = this.getAttribute('data-period');
+                    
+                    // Устанавливаем рекомендуемый период
+                    if (periodName === '16-30') {
+                        this.classList.add('recommended');
+                    }
+                });
+            });
+            
+            // Применение выбранного периода
+            applyTimeBtn.addEventListener('click', function() {
+                const activePeriod = document.querySelector('.time-period.active');
+                if (activePeriod) {
+                    const period = activePeriod.getAttribute('data-period');
+                    
+                    // Устанавливаем выбранный период как новый
+                    document.getElementById('time_new_period').value = period;
+                    
+                    // Автоматически устанавливаем старый период
+                    let oldPeriod;
+                    switch(period) {
+                        case 'prematch': oldPeriod = 'prematch'; break;
+                        case '1-15': oldPeriod = 'prematch'; break;
+                        case '16-30': oldPeriod = '1-15'; break;
+                        case '31-45': oldPeriod = '16-30'; break;
+                        case '46-60': oldPeriod = '31-45'; break;
+                        case '61-75': oldPeriod = '46-60'; break;
+                        case '76-90': oldPeriod = '61-75'; break;
+                        default: oldPeriod = 'prematch';
+                    }
+                    
+                    document.getElementById('time_old_period').value = oldPeriod;
+                    
+                    // Обновляем коэффициенты на основе периода
+                    updateCoefficientsByPeriod(period, oldPeriod);
+                    
+                    // Переключаемся на вкладку ввода
+                    document.querySelector('.tab[data-tab="input"]').click();
+                }
+            });
+            
+            // Кнопка перехода к рекомендациям
+            goToBetsBtn.addEventListener('click', function() {
+                document.querySelector('.tab[data-tab="bets"]').click();
+            });
+            
+            // Функция обновления коэффициентов по периоду
+            function updateCoefficientsByPeriod(newPeriod, oldPeriod) {
+                const baseCoefficients = {
+                    'prematch': { p1: 1.85, p2: 2.05 },
+                    '1-15': { p1: 1.82, p2: 2.08 },
+                    '16-30': { p1: 1.75, p2: 2.20 },
+                    '31-45': { p1: 1.70, p2: 2.30 },
+                    '46-60': { p1: 1.68, p2: 2.35 },
+                    '61-75': { p1: 1.65, p2: 2.40 },
+                    '76-90': { p1: 1.60, p2: 2.50 }
+                };
+                
+                if (baseCoefficients[oldPeriod]) {
+                    document.getElementById('p1_old').value = baseCoefficients[oldPeriod].p1;
+                    document.getElementById('p2_old').value = baseCoefficients[oldPeriod].p2;
+                }
+                
+                if (baseCoefficients[newPeriod]) {
+                    document.getElementById('p1_new').value = baseCoefficients[newPeriod].p1;
+                    document.getElementById('p2_new').value = baseCoefficients[newPeriod].p2;
+                }
+            }
             
             // Слайдер параметра w
             wParam.addEventListener('input', function() {
                 wValue.textContent = this.value;
+                calculate();
+            });
+            
+            // Слайдер временного фактора
+            timeFactor.addEventListener('input', function() {
+                timeFactorValue.textContent = this.value;
                 calculate();
             });
             
@@ -907,6 +2028,9 @@
                 document.getElementById('p1_new').value = '1.75';
                 document.getElementById('p2_new').value = '2.20';
                 
+                document.getElementById('time_old_period').value = '1-15';
+                document.getElementById('time_new_period').value = '16-30';
+                
                 document.getElementById('tb25_old').value = '1.95';
                 document.getElementById('tm25_old').value = '1.85';
                 document.getElementById('tb35_old').value = '2.30';
@@ -916,6 +2040,8 @@
                 
                 wParam.value = '1.5';
                 wValue.textContent = '1.5';
+                timeFactor.value = '1.2';
+                timeFactorValue.textContent = '1.2';
                 
                 calculate();
             });
@@ -927,6 +2053,39 @@
             
             infoBackBtn.addEventListener('click', function() {
                 document.querySelector('.tab[data-tab="input"]').click();
+            });
+            
+            timeBackBtn.addEventListener('click', function() {
+                document.querySelector('.tab[data-tab="input"]').click();
+            });
+            
+            betsBackBtn.addEventListener('click', function() {
+                document.querySelector('.tab[data-tab="results"]').click();
+            });
+            
+            historyBackBtn.addEventListener('click', function() {
+                document.querySelector('.tab[data-tab="bets"]').click();
+            });
+            
+            // Сохранение ставки в историю
+            saveBetBtn.addEventListener('click', function() {
+                const betData = getCurrentBetData();
+                if (betData) {
+                    saveBetToHistory(betData);
+                    updateHistoryDisplay();
+                    showNotification('Ставка сохранена в историю!');
+                    document.querySelector('.tab[data-tab="history"]').click();
+                }
+            });
+            
+            // Очистка истории
+            clearHistoryBtn.addEventListener('click', function() {
+                if (confirm('Вы уверены, что хотите очистить всю историю ставок?')) {
+                    betsHistory = [];
+                    localStorage.setItem('betsHistory', JSON.stringify(betsHistory));
+                    updateHistoryDisplay();
+                    showNotification('История ставок очищена');
+                }
             });
             
             // Swipe для мобильных
@@ -954,7 +2113,7 @@
                 }
             }, {passive: true});
             
-            // Функция расчета
+            // Функция расчета с учетом времени
             function calculate() {
                 // Получаем значения
                 const p1_old = parseFloat(document.getElementById('p1_old').value) || 1.85;
@@ -962,8 +2121,13 @@
                 const p1_new = parseFloat(document.getElementById('p1_new').value) || 1.75;
                 const p2_new = parseFloat(document.getElementById('p2_new').value) || 2.20;
                 const w = parseFloat(wParam.value) || 1.5;
+                const t = parseFloat(timeFactor.value) || 1.2;
                 
-                // Старые коэффициенты
+                // Временные периоды
+                const timeOldPeriod = document.getElementById('time_old_period').value;
+                const timeNewPeriod = document.getElementById('time_new_period').value;
+                
+                // Старые коэффициенты тоталов
                 const totals_old = {
                     'tb25': parseFloat(document.getElementById('tb25_old').value) || 1.95,
                     'tm25': parseFloat(document.getElementById('tm25_old').value) || 1.85,
@@ -977,26 +2141,27 @@
                 const r_old = 1/p1_old + 1/p2_old;
                 const r_new = 1/p1_new + 1/p2_new;
                 const r_ratio = r_new / r_old;
-                const correction_factor = Math.pow(r_ratio, w);
+                
+                // Коррекция с учетом временного фактора
+                const timeAdjustedPower = w * t;
+                const correction_factor = Math.pow(r_ratio, timeAdjustedPower);
                 
                 // Новые коэффициенты
                 const totals_new = {};
                 const deltas = {};
+                const deltaPercentages = {};
                 
                 for (const [key, k_old] of Object.entries(totals_old)) {
                     totals_new[key] = k_old * correction_factor;
                     deltas[key] = totals_new[key] - k_old;
+                    deltaPercentages[key] = (deltas[key] / k_old) * 100;
                 }
                 
                 // Обновляем результаты
                 document.getElementById('r_old').textContent = r_old.toFixed(3);
                 document.getElementById('r_new').textContent = r_new.toFixed(3);
-                
-                const marginChangePercent = ((r_new - r_old) / r_old * 100).toFixed(2);
-                document.getElementById('margin_change').textContent = 
-                    (marginChangePercent >= 0 ? '+' : '') + marginChangePercent + '%';
-                
-                document.getElementById('correction_factor').textContent = correction_factor.toFixed(3);
+                document.getElementById('time_factor_display').textContent = t.toFixed(1) + 'x';
+                document.getElementById('time_period').textContent = `${timeOldPeriod} → ${timeNewPeriod}`;
                 
                 // Обновляем новые коэффициенты
                 for (const [key, value] of Object.entries(totals_new)) {
@@ -1035,20 +2200,389 @@
                 document.getElementById('min_change').textContent = 
                     `${totalNames[minKey]} (+${minDelta.toFixed(3)})`;
                 
-                // Рекомендация
-                let recommendation = 'Следить за ';
-                if (maxDelta > avgDelta * 1.5) {
-                    recommendation += totalNames[maxKey];
-                } else if (minDelta < avgDelta * 0.5) {
-                    recommendation += totalNames[minKey];
-                } else {
-                    recommendation += 'ТМ 3.5';
+                // Расчет эффективности
+                const periodEfficiency = periodData[timeNewPeriod]?.efficiency || 75;
+                const timeDiff = getTimeDiff(timeOldPeriod, timeNewPeriod);
+                const efficiency = Math.min(95, periodEfficiency + (timeDiff * 2));
+                document.getElementById('efficiency').textContent = efficiency + '%';
+                
+                // Обновляем тренд графики
+                updateTrendCharts(p1_old, p1_new, p2_old, p2_new);
+                
+                // Генерируем рекомендации по ставкам
+                generateBetRecommendations(totals_new, deltas, deltaPercentages, timeNewPeriod);
+            }
+            
+            // Получение данных текущей ставки
+            function getCurrentBetData() {
+                const betName = document.getElementById('bet_main_name').textContent;
+                const betCoef = parseFloat(document.getElementById('bet_main_coef').textContent);
+                const betTime = document.getElementById('bet_main_time').textContent;
+                const betPeriod = document.getElementById('bet_optimal_period').textContent;
+                
+                if (!betName || !betCoef) return null;
+                
+                return {
+                    id: Date.now(),
+                    date: new Date().toLocaleString('ru-RU'),
+                    name: betName,
+                    coefficient: betCoef,
+                    time: betTime,
+                    period: betPeriod,
+                    status: 'pending', // pending, win, loss
+                    profit: calculatePotentialProfit(betCoef)
+                };
+            }
+            
+            // Расчет потенциальной прибыли
+            function calculatePotentialProfit(coef) {
+                const stake = 1000; // Условная ставка 1000 руб
+                return Math.round((coef - 1) * stake);
+            }
+            
+            // Сохранение ставки в историю
+            function saveBetToHistory(betData) {
+                betsHistory.unshift(betData); // Добавляем в начало
+                
+                // Ограничиваем историю 50 записями
+                if (betsHistory.length > 50) {
+                    betsHistory = betsHistory.slice(0, 50);
                 }
-                document.getElementById('recommendation').textContent = recommendation;
+                
+                // Сохраняем в localStorage
+                localStorage.setItem('betsHistory', JSON.stringify(betsHistory));
+            }
+            
+            // Обновление отображения истории
+            function updateHistoryDisplay() {
+                const historyList = document.getElementById('history-list');
+                const emptyHistory = document.getElementById('empty-history');
+                
+                if (betsHistory.length === 0) {
+                    historyList.innerHTML = '';
+                    emptyHistory.style.display = 'block';
+                    updateStatistics();
+                    return;
+                }
+                
+                emptyHistory.style.display = 'none';
+                
+                let html = '';
+                betsHistory.forEach(bet => {
+                    const statusClass = bet.status;
+                    const statusText = getStatusText(bet.status);
+                    const statusColor = getStatusColor(bet.status);
+                    
+                    html += `
+                        <div class="history-item ${statusClass}" data-id="${bet.id}">
+                            <div class="history-header">
+                                <div class="history-date">${bet.date}</div>
+                                <div class="history-status ${statusColor}">${statusText}</div>
+                            </div>
+                            <div class="history-details">
+                                <div class="history-detail">
+                                    <div class="label">Ставка</div>
+                                    <div class="value">${bet.name}</div>
+                                </div>
+                                <div class="history-detail">
+                                    <div class="label">Коэффициент</div>
+                                    <div class="value">${bet.coefficient.toFixed(3)}</div>
+                                </div>
+                                <div class="history-detail">
+                                    <div class="label">Время</div>
+                                    <div class="value">${bet.time}</div>
+                                </div>
+                                <div class="history-detail">
+                                    <div class="label">Период</div>
+                                    <div class="value">${bet.period}</div>
+                                </div>
+                            </div>
+                            <div class="history-actions">
+                                ${bet.status !== 'win' ? 
+                                    `<button class="history-btn win" onclick="markBetAs('${bet.id}', 'win')">Выиграла</button>` : 
+                                    '<button class="history-btn win" disabled>✓ Выиграла</button>'}
+                                ${bet.status !== 'loss' ? 
+                                    `<button class="history-btn loss" onclick="markBetAs('${bet.id}', 'loss')">Проиграла</button>` : 
+                                    '<button class="history-btn loss" disabled>✗ Проиграла</button>'}
+                                <button class="history-btn delete" onclick="deleteBet('${bet.id}')">Удалить</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                historyList.innerHTML = html;
+                updateStatistics();
+            }
+            
+            // Обновление статистики
+            function updateStatistics() {
+                const totalBets = betsHistory.length;
+                const winBets = betsHistory.filter(b => b.status === 'win').length;
+                const lossBets = betsHistory.filter(b => b.status === 'loss').length;
+                const pendingBets = betsHistory.filter(b => b.status === 'pending').length;
+                
+                const winRate = totalBets > 0 ? Math.round((winBets / totalBets) * 100) : 0;
+                
+                // Расчет общей прибыли (упрощенно)
+                let totalProfit = 0;
+                betsHistory.forEach(bet => {
+                    if (bet.status === 'win') {
+                        totalProfit += calculatePotentialProfit(bet.coefficient);
+                    } else if (bet.status === 'loss') {
+                        totalProfit -= 1000; // Условная ставка
+                    }
+                });
+                
+                document.getElementById('total-bets').textContent = totalBets;
+                document.getElementById('win-rate').textContent = `${winRate}%`;
+                document.getElementById('total-profit').textContent = `${totalProfit >= 0 ? '+' : ''}${totalProfit}`;
+                
+                // Цвет прибыли
+                const profitElement = document.getElementById('total-profit');
+                profitElement.style.color = totalProfit >= 0 ? 'var(--success)' : 'var(--danger)';
+            }
+            
+            // Функции для работы с историей (добавляем в глобальную область видимости)
+            window.markBetAs = function(id, status) {
+                const betIndex = betsHistory.findIndex(b => b.id == id);
+                if (betIndex !== -1) {
+                    betsHistory[betIndex].status = status;
+                    localStorage.setItem('betsHistory', JSON.stringify(betsHistory));
+                    updateHistoryDisplay();
+                    showNotification(`Статус ставки изменен: ${getStatusText(status)}`);
+                }
+            };
+            
+            window.deleteBet = function(id) {
+                if (confirm('Удалить эту ставку из истории?')) {
+                    betsHistory = betsHistory.filter(b => b.id != id);
+                    localStorage.setItem('betsHistory', JSON.stringify(betsHistory));
+                    updateHistoryDisplay();
+                    showNotification('Ставка удалена из истории');
+                }
+            };
+            
+            // Вспомогательные функции
+            function getStatusText(status) {
+                const texts = {
+                    'pending': 'В ожидании',
+                    'win': 'Выиграла',
+                    'loss': 'Проиграла'
+                };
+                return texts[status] || status;
+            }
+            
+            function getStatusColor(status) {
+                const colors = {
+                    'pending': 'status-pending',
+                    'win': 'status-win',
+                    'loss': 'status-loss'
+                };
+                return colors[status] || 'status-pending';
+            }
+            
+            // Генерация рекомендаций по ставкам
+            function generateBetRecommendations(totals_new, deltas, deltaPercentages, timeNewPeriod) {
+                const totalNames = {
+                    'tb25': 'ТБ 2.5', 'tm25': 'ТМ 2.5',
+                    'tb35': 'ТБ 3.5', 'tm35': 'ТМ 3.5',
+                    'tb15': 'ТБ 1.5', 'tm15': 'ТМ 1.5'
+                };
+                
+                // Создаем массив для сортировки
+                const bets = [];
+                for (const [key, delta] of Object.entries(deltas)) {
+                    bets.push({
+                        key,
+                        name: totalNames[key],
+                        coef: totals_new[key],
+                        delta: delta,
+                        deltaPercent: deltaPercentages[key],
+                        score: calculateBetScore(totals_new[key], delta, deltaPercentages[key])
+                    });
+                }
+                
+                // Сортируем по score (лучшие ставки первыми)
+                bets.sort((a, b) => b.score - a.score);
+                
+                // Главная рекомендация (лучшая ставка)
+                const mainBet = bets[0];
+                document.getElementById('bet_main_name').textContent = mainBet.name;
+                document.getElementById('bet_main_coef').textContent = mainBet.coef.toFixed(3);
+                document.getElementById('bet_main_time').textContent = getOptimalEntryTime(timeNewPeriod);
+                document.getElementById('bet_main_profit').textContent = `+${(mainBet.deltaPercent).toFixed(1)}%`;
+                
+                // Обоснование главной рекомендации
+                let reason = '';
+                if (mainBet.deltaPercent > 0.03) {
+                    reason = `Наибольший рост коэффициента (+${mainBet.delta.toFixed(3)}). Коэффициент вырос на ${(mainBet.deltaPercent).toFixed(1)}%, что указывает на переоценку букмекером вероятности события.`;
+                } else if (mainBet.coef > 2.5) {
+                    reason = `Высокий коэффициент ${mainBet.coef.toFixed(3)} при росте +${mainBet.delta.toFixed(3)}. Хорошее соотношение риск/прибыль для данного периода.`;
+                } else {
+                    reason = `Стабильный рост коэффициента в выбранный период. Изменение +${mainBet.delta.toFixed(3)} указывает на перспективность ставки.`;
+                }
+                document.getElementById('bet_main_reason').textContent = reason;
+                
+                // Альтернативные ставки
+                if (bets.length > 1) {
+                    document.getElementById('bet_alt1_name').textContent = bets[1].name;
+                    document.getElementById('bet_alt1_coef').textContent = bets[1].coef.toFixed(3);
+                    document.getElementById('bet_alt1_potential').textContent = `+${(bets[1].deltaPercent).toFixed(0)}%`;
+                }
+                
+                if (bets.length > 2) {
+                    document.getElementById('bet_alt2_name').textContent = bets[2].name;
+                    document.getElementById('bet_alt2_coef').textContent = bets[2].coef.toFixed(3);
+                    document.getElementById('bet_alt2_potential').textContent = `+${(bets[2].deltaPercent).toFixed(0)}%`;
+                }
+                
+                // Стратегия
+                const periodData = getPeriodData(timeNewPeriod);
+                document.getElementById('bet_strategy').textContent = 
+                    `Делать ставку на ${periodData.bestTime} при коэффициенте выше ${(mainBet.coef * 0.95).toFixed(2)}`;
+                
+                // Детали рекомендации
+                document.getElementById('bet_optimal_period').textContent = 
+                    periodData.name || '16-30 минута';
+                document.getElementById('bet_best_time').textContent = 
+                    periodData.bestTime || '20-25 минута';
+                document.getElementById('bet_size').textContent = 
+                    getRecommendedBetSize(mainBet.coef, mainBet.deltaPercent);
+                document.getElementById('bet_accuracy').textContent = 
+                    `±${(100 - (periodData.efficiency || 85) + 5).toFixed(1)}%`;
+            }
+            
+            // Расчет score для ставки
+            function calculateBetScore(coef, delta, deltaPercent) {
+                // Коэффициент должен быть не слишком низким
+                const coefScore = Math.min(10, (coef - 1.2) * 5);
+                
+                // Абсолютное изменение
+                const deltaScore = delta * 20;
+                
+                // Процентное изменение
+                const deltaPercentScore = deltaPercent * 10;
+                
+                // Общий score
+                return coefScore + deltaScore + deltaPercentScore;
+            }
+            
+            // Рекомендуемый размер ставки
+            function getRecommendedBetSize(coef, deltaPercent) {
+                if (coef > 3) return '1-2% от банка';
+                if (coef > 2) return '2-3% от банка';
+                if (coef > 1.5) return '3-4% от банка';
+                return '1% от банка';
+            }
+            
+            // Данные периода
+            function getPeriodData(period) {
+                const periodNames = {
+                    'prematch': { name: 'Прематч', bestTime: 'непосредственно перед началом', efficiency: 65 },
+                    '1-15': { name: '1-15 минута', bestTime: '10-12 минута', efficiency: 78 },
+                    '16-30': { name: '16-30 минута', bestTime: '20-25 минута', efficiency: 92 },
+                    '31-45': { name: '31-45 минута', bestTime: '35-40 минута', efficiency: 72 },
+                    '46-60': { name: '46-60 минута', bestTime: '50-55 минута', efficiency: 81 },
+                    '61-75': { name: '61-75 минута', bestTime: '65-70 минута', efficiency: 76 },
+                    '76-90': { name: '76-90 минута', bestTime: '80-85 минута', efficiency: 58 }
+                };
+                return periodNames[period] || periodNames['16-30'];
+            }
+            
+            // Вспомогательные функции для времени
+            function getTimeDiff(period1, period2) {
+                const periods = ['prematch', '1-15', '16-30', '31-45', '46-60', '61-75', '76-90'];
+                const idx1 = periods.indexOf(period1);
+                const idx2 = periods.indexOf(period2);
+                return Math.abs(idx2 - idx1);
+            }
+            
+            function getOptimalEntryTime(period) {
+                const optimalTimes = {
+                    'prematch': 'непосредственно перед началом',
+                    '1-15': '10-12 минута',
+                    '16-30': '20-25 минута',
+                    '31-45': '35-40 минута',
+                    '46-60': '50-55 минута',
+                    '61-75': '65-70 минута',
+                    '76-90': '80-85 минута'
+                };
+                return optimalTimes[period] || '20-25 минута';
+            }
+            
+            function updateTrendCharts(p1_old, p1_new, p2_old, p2_new) {
+                const p1Change = ((p1_new - p1_old) / p1_old * 100).toFixed(1);
+                const p2Change = ((p2_new - p2_old) / p2_old * 100).toFixed(1);
+                
+                document.querySelectorAll('.trend-value')[0].textContent = 
+                    (p1Change >= 0 ? '▲ ' : '▼ ') + Math.abs(p1Change) + '%';
+                document.querySelectorAll('.trend-value')[1].textContent = 
+                    (p2Change >= 0 ? '▲ ' : '▼ ') + Math.abs(p2Change) + '%';
+                
+                // Обновляем прогресс-бары
+                const p1Fill = Math.min(100, Math.max(0, 50 - parseFloat(p1Change) * 2));
+                const p2Fill = Math.min(100, Math.max(0, 50 + parseFloat(p2Change) * 2));
+                
+                document.querySelectorAll('.trend-fill')[0].style.width = p1Fill + '%';
+                document.querySelectorAll('.trend-fill')[1].style.width = p2Fill + '%';
+            }
+            
+            // Показать уведомление
+            function showNotification(message) {
+                // Удаляем старое уведомление
+                const oldNotification = document.querySelector('.notification');
+                if (oldNotification) oldNotification.remove();
+                
+                // Создаем новое уведомление
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 100px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: var(--success);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    z-index: 1000;
+                    font-weight: 600;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    animation: slideIn 0.3s ease;
+                    max-width: 80%;
+                    text-align: center;
+                `;
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                // Удаляем уведомление через 3 секунды
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+                
+                // Добавляем стили для анимации
+                if (!document.querySelector('#notification-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'notification-styles';
+                    style.textContent = `
+                        @keyframes slideIn {
+                            from { top: 80px; opacity: 0; }
+                            to { top: 100px; opacity: 1; }
+                        }
+                        @keyframes slideOut {
+                            from { top: 100px; opacity: 1; }
+                            to { top: 80px; opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
             }
             
             // Инициализация
             calculate();
+            updateHistoryDisplay();
             
             // Адаптация для iPhone
             if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
