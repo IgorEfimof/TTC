@@ -1195,23 +1195,75 @@
             -moz-appearance: textfield;
         }
         
-        /* iOS оптимизация клавиатуры */
-        .ios-keyboard-optimized {
-            font-size: 16px !important; /* Предотвращает масштабирование в iOS */
+        /* Стили для красивого ввода чисел */
+        .decimal-input {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Consolas', monospace;
+            letter-spacing: 0.5px;
+            position: relative;
         }
         
-        /* Класс для числовых полей с десятичной точкой */
-        .decimal-input {
-            inputmode: decimal;
-            -webkit-appearance: none;
-            appearance: none;
+        .decimal-input:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1) !important;
+            outline: none;
+        }
+        
+        .decimal-input.valid {
+            border-color: var(--success) !important;
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+        
+        .decimal-input.invalid {
+            border-color: var(--danger) !important;
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+        
+        /* Клавиатура iOS */
+        .decimal-keyboard {
+            font-size: 16px !important;
+        }
+        
+        /* Индикатор правильного формата */
+        .input-hint {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 4px;
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        .theme-dark .input-hint,
+        .theme-blue .input-hint,
+        .theme-green .input-hint {
+            color: #aaa;
+        }
+        
+        /* Улучшенные поля ввода */
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon input {
+            padding-left: 40px !important;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1rem;
         }
         
         /* Специальные стили для iOS */
         @supports (-webkit-touch-callout: none) {
-            input[type="number"] {
+            input[type="text"].decimal-input,
+            input[type="number"].decimal-input {
                 font-size: 16px !important;
                 letter-spacing: 0.5px;
+                padding: 12px 8px !important;
             }
             
             .input-item input:focus,
@@ -1290,13 +1342,21 @@
                             </div>
                             <div class="input-item">
                                 <label>П1 старый</label>
-                                <input type="number" id="p1_old" step="0.01" min="1.01" value="1.85" placeholder="1.85" 
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <div class="input-with-icon">
+                                    <span class="input-icon">1</span>
+                                    <input type="text" id="p1_old" value="1.85" placeholder="1.85" 
+                                           inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
+                                </div>
+                                <div class="input-hint">Используйте точку или запятую</div>
                             </div>
                             <div class="input-item">
                                 <label>П2 старый</label>
-                                <input type="number" id="p2_old" step="0.01" min="1.01" value="2.05" placeholder="2.05"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <div class="input-with-icon">
+                                    <span class="input-icon">2</span>
+                                    <input type="text" id="p2_old" value="2.05" placeholder="2.05"
+                                           inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
+                                </div>
+                                <div class="input-hint">Используйте точку или запятую</div>
                             </div>
                         </div>
                         
@@ -1315,13 +1375,21 @@
                             </div>
                             <div class="input-item">
                                 <label>П1 новый</label>
-                                <input type="number" id="p1_new" step="0.01" min="1.01" value="1.75" placeholder="1.75"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <div class="input-with-icon">
+                                    <span class="input-icon">1</span>
+                                    <input type="text" id="p1_new" value="1.75" placeholder="1.75"
+                                           inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
+                                </div>
+                                <div class="input-hint">Используйте точку или запятую</div>
                             </div>
                             <div class="input-item">
                                 <label>П2 новый</label>
-                                <input type="number" id="p2_new" step="0.01" min="1.01" value="2.20" placeholder="2.20"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <div class="input-with-icon">
+                                    <span class="input-icon">2</span>
+                                    <input type="text" id="p2_new" value="2.20" placeholder="2.20"
+                                           inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
+                                </div>
+                                <div class="input-hint">Используйте точку или запятую</div>
                             </div>
                         </div>
                     </div>
@@ -1341,34 +1409,37 @@
                         <div class="totals-grid">
                             <div class="total-item">
                                 <label>ТБ 2.5</label>
-                                <input type="number" id="tb25_old" step="0.01" min="1.01" value="1.95"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <input type="text" id="tb25_old" value="1.95"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
                             </div>
                             <div class="total-item">
                                 <label>ТМ 2.5</label>
-                                <input type="number" id="tm25_old" step="0.01" min="1.01" value="1.85"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <input type="text" id="tm25_old" value="1.85"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
                             </div>
                             <div class="total-item">
                                 <label>ТБ 3.5</label>
-                                <input type="number" id="tb35_old" step="0.01" min="1.01" value="2.30"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <input type="text" id="tb35_old" value="2.30"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
                             </div>
                             <div class="total-item">
                                 <label>ТМ 3.5</label>
-                                <input type="number" id="tm35_old" step="0.01" min="1.01" value="1.65"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <input type="text" id="tm35_old" value="1.65"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
                             </div>
                             <div class="total-item">
                                 <label>ТБ 1.5</label>
-                                <input type="number" id="tb15_old" step="0.01" min="1.01" value="1.45"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <input type="text" id="tb15_old" value="1.45"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
                             </div>
                             <div class="total-item">
                                 <label>ТМ 1.5</label>
-                                <input type="number" id="tm15_old" step="0.01" min="1.01" value="2.70"
-                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="ios-keyboard-optimized">
+                                <input type="text" id="tm15_old" value="2.70"
+                                       inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="decimal-input decimal-keyboard">
                             </div>
+                        </div>
+                        <div class="input-hint" style="text-align: center; margin-top: 8px;">
+                            Используйте точку или запятую для ввода десятичных чисел
                         </div>
                     </div>
                     
@@ -1912,39 +1983,22 @@
                 }
             };
             
-            // ОПТИМИЗАЦИЯ ДЛЯ iOS - ЦИФРОВАЯ КЛАВИАТУРА
-            function setupIOSKeyboard() {
-                const numberInputs = document.querySelectorAll('input[type="number"]');
+            // НАСТРОЙКА ДЕСЯТИЧНОГО ВВОДА С ПОДДЕРЖКОЙ ТОЧКИ И ЗАПЯТОЙ
+            function setupDecimalInputs() {
+                const decimalInputs = document.querySelectorAll('.decimal-input');
                 
-                numberInputs.forEach(input => {
-                    // Для iOS добавляем специальные атрибуты для цифровой клавиатуры с десятичной точкой
-                    input.setAttribute('inputmode', 'decimal');
-                    input.setAttribute('pattern', '[0-9]*[.,]?[0-9]*');
-                    
-                    // Обработка ввода для iOS
-                    input.addEventListener('focus', function() {
-                        // При фокусе добавляем класс для iOS
-                        this.classList.add('ios-focused');
-                        
-                        // На iOS фокус на input может вызвать неправильную прокрутку
-                        setTimeout(() => {
-                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }, 300);
-                    });
-                    
-                    input.addEventListener('blur', function() {
-                        this.classList.remove('ios-focused');
-                    });
-                    
-                    // Автозамена запятой на точку для корректного парсинга
+                decimalInputs.forEach(input => {
+                    // Обработка ввода - разрешаем только цифры, точку и запятую
                     input.addEventListener('input', function(e) {
                         let value = this.value;
+                        const cursorPosition = this.selectionStart;
                         
-                        // Заменяем запятую на точку
+                        // Сохраняем оригинальную запятую/точку для правильной работы
+                        // Разрешаем только цифры, точку и запятую
+                        value = value.replace(/[^\d.,]/g, '');
+                        
+                        // Заменяем запятую на точку для внутреннего представления
                         value = value.replace(/,/g, '.');
-                        
-                        // Удаляем все символы, кроме цифр и точки
-                        value = value.replace(/[^\d.]/g, '');
                         
                         // Удаляем лишние точки (оставляем только первую)
                         const parts = value.split('.');
@@ -1960,33 +2014,107 @@
                             }
                         }
                         
+                        // Убедимся, что значение не пустое
+                        if (value === '' || value === '.') {
+                            value = '';
+                        }
+                        
+                        // Устанавливаем значение обратно
                         this.value = value;
+                        
+                        // Восстанавливаем позицию курсора
+                        setTimeout(() => {
+                            this.setSelectionRange(cursorPosition, cursorPosition);
+                        }, 0);
+                        
+                        // Визуальная обратная связь
+                        validateDecimalInput(this);
                     });
                     
-                    // Для iOS также обрабатываем событие change
-                    input.addEventListener('change', function() {
+                    // Обработка потери фокуса - форматируем значение
+                    input.addEventListener('blur', function() {
                         let value = this.value;
-                        value = value.replace(/,/g, '.');
-                        this.value = value;
-                    });
-                });
-                
-                // Для селектов также улучшаем UX на iOS
-                const selectElements = document.querySelectorAll('select');
-                selectElements.forEach(select => {
-                    select.addEventListener('focus', function() {
-                        // На iOS увеличиваем шрифт при фокусе на селекте
-                        this.style.fontSize = '16px';
+                        
+                        if (value === '' || value === '.') {
+                            this.value = '';
+                            this.classList.remove('valid', 'invalid');
+                            return;
+                        }
+                        
+                        // Добавляем ведущий ноль если нужно
+                        if (value.startsWith('.')) {
+                            value = '0' + value;
+                        }
+                        
+                        // Убедимся, что это корректное число
+                        const numValue = parseFloat(value);
+                        if (!isNaN(numValue) && numValue >= 0.01) {
+                            // Форматируем до 2 знаков после запятой
+                            this.value = numValue.toFixed(2);
+                            this.classList.add('valid');
+                            this.classList.remove('invalid');
+                        } else {
+                            this.classList.add('invalid');
+                            this.classList.remove('valid');
+                        }
                     });
                     
-                    select.addEventListener('blur', function() {
-                        this.style.fontSize = '';
+                    // Обработка фокуса - очищаем стили валидации
+                    input.addEventListener('focus', function() {
+                        this.classList.remove('valid', 'invalid');
+                        
+                        // На iOS автоматически показываем цифровую клавиатуру с десятичной точкой
+                        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                            this.setAttribute('inputmode', 'decimal');
+                        }
+                    });
+                    
+                    // Обработка вставки из буфера обмена
+                    input.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        const pastedText = e.clipboardData.getData('text');
+                        
+                        // Обрабатываем вставленный текст
+                        let processed = pastedText.replace(/[^\d.,]/g, '');
+                        processed = processed.replace(/,/g, '.');
+                        
+                        // Вставляем обработанный текст
+                        const start = this.selectionStart;
+                        const end = this.selectionEnd;
+                        const currentValue = this.value;
+                        
+                        this.value = currentValue.substring(0, start) + 
+                                    processed + 
+                                    currentValue.substring(end);
+                        
+                        // Запускаем валидацию
+                        validateDecimalInput(this);
                     });
                 });
             }
             
-            // Инициализация iOS оптимизации
-            setupIOSKeyboard();
+            // Валидация десятичного ввода
+            function validateDecimalInput(input) {
+                const value = input.value;
+                
+                if (value === '' || value === '.') {
+                    input.classList.remove('valid', 'invalid');
+                    return;
+                }
+                
+                const numValue = parseFloat(value.replace(/,/g, '.'));
+                
+                if (!isNaN(numValue) && numValue >= 0.01) {
+                    input.classList.add('valid');
+                    input.classList.remove('invalid');
+                } else {
+                    input.classList.add('invalid');
+                    input.classList.remove('valid');
+                }
+            }
+            
+            // Инициализация десятичного ввода
+            setupDecimalInputs();
             
             // Управление вкладками
             tabs.forEach(tab => {
@@ -2113,13 +2241,13 @@
                 };
                 
                 if (baseCoefficients[oldPeriod]) {
-                    document.getElementById('p1_old').value = baseCoefficients[oldPeriod].p1;
-                    document.getElementById('p2_old').value = baseCoefficients[oldPeriod].p2;
+                    document.getElementById('p1_old').value = baseCoefficients[oldPeriod].p1.toFixed(2);
+                    document.getElementById('p2_old').value = baseCoefficients[oldPeriod].p2.toFixed(2);
                 }
                 
                 if (baseCoefficients[newPeriod]) {
-                    document.getElementById('p1_new').value = baseCoefficients[newPeriod].p1;
-                    document.getElementById('p2_new').value = baseCoefficients[newPeriod].p2;
+                    document.getElementById('p1_new').value = baseCoefficients[newPeriod].p1.toFixed(2);
+                    document.getElementById('p2_new').value = baseCoefficients[newPeriod].p2.toFixed(2);
                 }
             }
             
@@ -2166,6 +2294,11 @@
                 wValue.textContent = '1.5';
                 timeFactor.value = '1.2';
                 timeFactorValue.textContent = '1.2';
+                
+                // Валидируем все поля после сброса
+                document.querySelectorAll('.decimal-input').forEach(input => {
+                    validateDecimalInput(input);
+                });
                 
                 calculate();
             });
@@ -2239,12 +2372,31 @@
             
             // Функция расчета с учетом времени
             function calculate() {
-                // Функция для безопасного парсинга чисел с заменой запятой на точку
+                // Улучшенная функция для безопасного парсинга чисел с поддержкой точки и запятой
                 function safeParseFloat(value) {
-                    if (!value) return NaN;
-                    // Заменяем запятую на точку и удаляем пробелы
-                    const cleanValue = String(value).replace(/,/g, '.').replace(/\s/g, '');
-                    return parseFloat(cleanValue);
+                    if (!value || value.trim() === '') return NaN;
+                    
+                    // Заменяем запятую на точку, удаляем пробелы и лишние символы
+                    let cleanValue = String(value).trim()
+                        .replace(/,/g, '.')
+                        .replace(/\s/g, '')
+                        .replace(/[^\d.]/g, '');
+                    
+                    // Удаляем лишние точки
+                    const parts = cleanValue.split('.');
+                    if (parts.length > 2) {
+                        cleanValue = parts[0] + '.' + parts.slice(1).join('');
+                    }
+                    
+                    // Проверяем, что это валидное число
+                    const result = parseFloat(cleanValue);
+                    
+                    // Если результат не число или меньше 0.01, возвращаем NaN
+                    if (isNaN(result) || result < 0.01) {
+                        return NaN;
+                    }
+                    
+                    return result;
                 }
                 
                 // Получаем значения с безопасным парсингом
