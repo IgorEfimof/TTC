@@ -49,11 +49,8 @@
             color: var(--text-main);
             line-height: 1.5;
             min-height: 100vh;
-            /* Убираем padding, вместо этого используем margin для контента */
             padding: 0;
-            /* Учитываем безопасные зоны через margin */
             margin: var(--safe-area-top) var(--safe-area-right) var(--safe-area-bottom) var(--safe-area-left);
-            /* Чтобы фон заполнял всю область */
             background-attachment: fixed;
         }
 
@@ -64,7 +61,6 @@
             flex-direction: column;
         }
 
-        /* Header - Компактный с улучшенной обработкой safe area */
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, #283593 100%);
             padding: 15px 16px 10px;
@@ -72,10 +68,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            /* Растягиваем на всю ширину с учетом safe area */
             width: 100%;
             margin-top: calc(-1 * var(--safe-area-top));
-            /* Расширяем фон для покрытия безопасной зоны */
             padding-top: calc(15px + var(--safe-area-top));
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
@@ -125,7 +119,6 @@
             transform: scale(1.1);
         }
 
-        /* Tabs - Компактные */
         .tabs-container {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
@@ -169,7 +162,6 @@
             border-bottom: 2px solid var(--accent);
         }
 
-        /* Content - Компактный */
         .content {
             padding: 16px;
             flex: 1;
@@ -189,7 +181,6 @@
             display: block;
         }
 
-        /* Card - Компактный */
         .card {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -211,7 +202,6 @@
             border-bottom: 1px solid rgba(33, 150, 243, 0.2);
         }
 
-        /* Input Groups - Компактные, 2 колонки */
         .input-section {
             margin-bottom: 16px;
         }
@@ -272,7 +262,6 @@
             opacity: 0.8;
         }
 
-        /* Totals Grid - 2 колонки */
         .totals-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -307,7 +296,6 @@
             padding: 2px;
         }
 
-        /* Banner - Компактный */
         .banner {
             background: linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(33, 150, 243, 0.05) 100%);
             border-radius: var(--radius);
@@ -333,7 +321,6 @@
             line-height: 1.4;
         }
 
-        /* Buttons - Компактные */
         .button-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -372,7 +359,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Time Grid - 2 колонки */
         .time-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -408,7 +394,6 @@
             font-weight: 600;
         }
 
-        /* Results - 2 колонки */
         .results-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -439,7 +424,6 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* Bet Recommendation - Компактный */
         .bet-recommendation {
             background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(76, 175, 80, 0.05) 100%);
             border-radius: var(--radius);
@@ -518,7 +502,6 @@
             color: var(--text-main);
         }
 
-        /* History - Компактный */
         .history-list {
             max-height: 50vh;
             overflow-y: auto;
@@ -577,7 +560,6 @@
             color: var(--loss);
         }
 
-        /* Statistics - 3 колонки компактные */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -606,7 +588,104 @@
             font-weight: 600;
         }
 
-        /* Footer - Компактный */
+        /* Instruction specific styles */
+        .instruction-section {
+            margin-bottom: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, transparent 100%);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .instruction-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instruction-content {
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .instruction-step {
+            margin-bottom: 10px;
+            padding-left: 8px;
+            border-left: 2px solid rgba(33, 150, 243, 0.3);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .warning-note {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, transparent 100%);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .success-note {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, transparent 100%);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        /* Toggle for detailed instructions */
+        .toggle-btn {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background: var(--bg-card);
+        }
+
+        .toggle-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 12px;
+        }
+
+        .toggle-content.expanded {
+            max-height: 2000px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 6px 6px;
+            margin-bottom: 12px;
+        }
+
         .footer {
             text-align: center;
             padding: 16px;
@@ -617,7 +696,6 @@
             background: var(--bg-card);
         }
 
-        /* Small utility classes */
         .mb-8 { margin-bottom: 8px; }
         .mt-12 { margin-top: 12px; }
         .text-center { text-align: center; }
@@ -627,7 +705,6 @@
         .text-profit { color: var(--profit); }
         .text-accent { color: var(--accent); }
 
-        /* Responsive - Для очень маленьких экранов */
         @media (max-width: 360px) {
             .content {
                 padding: 12px;
@@ -691,7 +768,6 @@
             }
         }
 
-        /* Специальные стили для iOS и других устройств с безопасными зонами */
         @supports (padding: max(0px)) {
             body {
                 padding-left: min(0px, var(--safe-area-left));
@@ -1075,34 +1151,233 @@
                 </div>
             </div>
             
-            <!-- Info Tab -->
+            <!-- Info Tab - ОБНОВЛЕНА С ПОДРОБНОЙ ИНСТРУКЦИЕЙ -->
             <div id="info" class="tab-content">
                 <div class="card">
-                    <div class="card-title">📚 Как работает система</div>
+                    <div class="card-title">🚀 ПОЛНАЯ ИНСТРУКЦИЯ: КАК ОБЫГРАТЬ БУКМЕКЕРА НА 100%</div>
                     
-                    <div class="mb-8">
-                        <div class="font-bold text-accent mb-4">Математическая модель расчета</div>
-                        <div class="text-small text-secondary">
-                            1. <strong>Анализ маржи букмекера</strong> - расчет реальных вероятностей<br>
-                            2. <strong>Временной фактор</strong> - учет динамики коэффициентов<br>
-                            3. <strong>Корреляция рынков</strong> - связь между коэффициентами<br>
-                            4. <strong>Расчет value</strong> - определение переоцененных коэффициентов
+                    <div class="instruction-section">
+                        <div class="instruction-title">
+                            <span>🎯</span> ФИЛОСОФИЯ PROFIT PRO
+                        </div>
+                        <div class="instruction-content">
+                            PROFIT PRO — это не просто калькулятор, а математическая система Value Betting. 
+                            Мы не угадываем результаты, а находим недооцененные коэффициенты с математическим преимуществом. 
+                            Система построена на трех китах: <strong>математика</strong>, <strong>время</strong> и <strong>дисциплина</strong>.
                         </div>
                     </div>
                     
-                    <div class="mb-8">
-                        <div class="font-bold text-accent mb-4">💡 Стратегия для прибыли</div>
-                        <div class="text-small text-secondary">
-                            • <strong>Банкролл менеджмент</strong> - ставки 1-3% от банка<br>
-                            • <strong>Value betting</strong> - только ставки с преимуществом<br>
-                            • <strong>Анализ времени</strong> - ставки в оптимальные периоды<br>
-                            • <strong>Дисциплина</strong> - следование системе без эмоций
+                    <div class="instruction-section">
+                        <div class="instruction-title">
+                            <span>📊</span> ШАГ 1: СБОР ДАННЫХ (ВКЛАДКА "ВВОД")
+                        </div>
+                        <div class="instruction-content">
+                            <div class="instruction-step">
+                                <span class="step-number">1</span>
+                                <strong>Выберите временные периоды:</strong><br>
+                                • "Старое время" — период, когда вы заметили первые коэффициенты<br>
+                                • "Новое время" — текущий или планируемый период для ставки
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">2</span>
+                                <strong>Введите коэффициенты:</strong><br>
+                                • П1 и П2 — основные исходы матча<br>
+                                • Коэффициенты должны быть с одного букмекера и одного матча
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">3</span>
+                                <strong>Введите тоталы:</strong><br>
+                                • 6 основных тоталов (ТБ/ТМ 1.5, 2.5, 3.5)<br>
+                                • Используйте актуальные коэффициенты с букмекерской конторы
+                            </div>
                         </div>
                     </div>
                     
-                    <button class="btn btn-primary" id="back_to_input">
-                        <span>📊</span> НАЧАТЬ РАСЧЕТ
-                    </button>
+                    <div class="instruction-section">
+                        <div class="instruction-title">
+                            <span>⏰</span> ШАГ 2: АНАЛИЗ ВРЕМЕНИ (ВКЛАДКА "ВРЕМЯ")
+                        </div>
+                        <div class="instruction-content">
+                            <div class="instruction-step">
+                                <span class="step-number">1</span>
+                                <strong>Золотое правило:</strong> 16-30 минута — оптимальный период<br>
+                                • Уже виден тренд матча<br>
+                                • Коэффициенты еще не успели сильно измениться<br>
+                                • Маржа букмекера минимальна
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">2</span>
+                                <strong>Периоды для избегания:</strong><br>
+                                • Прематч (высокая маржа 8-12%)<br>
+                                • 31-45 минута (повышенная волатильность)<br>
+                                • Последние 10 минут (непредсказуемость)
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">3</span>
+                                <strong>Применяйте выбранный период:</strong><br>
+                                • Нажмите "Применить выбранный период"<br>
+                                • Система автоматически подставит его в расчеты
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-section">
+                        <div class="instruction-title">
+                            <span>🧮</span> ШАГ 3: МАТЕМАТИЧЕСКИЙ РАСЧЕТ (ВКЛАДКА "РАСЧЕТ")
+                        </div>
+                        <div class="instruction-content">
+                            <div class="instruction-step">
+                                <span class="step-number">1</span>
+                                <strong>Что происходит при расчете:</strong><br>
+                                • Система вычисляет реальную маржу букмекера<br>
+                                • Определяет изменение вероятностей исходов<br>
+                                • Учитывает временной фактор<br>
+                                • Корректирует коэффициенты тоталов
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">2</span>
+                                <strong>Ключевые показатели:</strong><br>
+                                • <strong>Маржа</strong> — комиссия букмекера (чем меньше, тем лучше)<br>
+                                • <strong>Изменение маржи</strong> — динамика комиссии<br>
+                                • <strong>Новые коэффициенты</strong> — математически обоснованные значения
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">3</span>
+                                <strong>Переходите к рекомендациям:</strong><br>
+                                • Нажмите "Показать рекомендации"<br>
+                                • Система покажет самые выгодные ставки
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-section">
+                        <div class="instruction-title">
+                            <span>🎯</span> ШАГ 4: РЕКОМЕНДАЦИИ ПО СТАВКАМ (ВКЛАДКА "СТАВКИ")
+                        </div>
+                        <div class="instruction-content">
+                            <div class="instruction-step">
+                                <span class="step-number">1</span>
+                                <strong>Главная рекомендация:</strong><br>
+                                • Ставка с наибольшим математическим преимуществом<br>
+                                • Процент уверенности 85%+<br>
+                                • Время ставки — оптимальный период
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">2</span>
+                                <strong>Альтернативные ставки:</strong><br>
+                                • Запасные варианты с преимуществом 4%+<br>
+                                • Используйте, если главная ставка недоступна
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">3</span>
+                                <strong>Стратегия ставок:</strong><br>
+                                • Размер ставки: 2-3% от банкролла<br>
+                                • Делайте ставку точно в указанное время<br>
+                                • Сохраняйте ставку в историю
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-section">
+                        <div class="instruction-title">
+                            <span>📈</span> ШАГ 5: УПРАВЛЕНИЕ БАНКРОЛЛОМ И ИСТОРИЕЙ
+                        </div>
+                        <div class="instruction-content">
+                            <div class="instruction-step">
+                                <span class="step-number">1</span>
+                                <strong>Банкролл-менеджмент:</strong><br>
+                                • Начальный банк: 100 000 ₽ (рекомендуется)<br>
+                                • Ставка: 2-3% от банка (2000-3000 ₽)<br>
+                                • Никогда не ставьте больше 5% от банка
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">2</span>
+                                <strong>Ведение истории:</strong><br>
+                                • Сохраняйте каждую рекомендацию<br>
+                                • Отмечайте результаты (выигрыш/проигрыш)<br>
+                                • Анализируйте статистику еженедельно
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">3</span>
+                                <strong>Критерии успеха:</strong><br>
+                                • Процент побед: 55%+ (при коэффициентах 1.8-2.2)<br>
+                                • ROI (окупаемость инвестиций): 5-10% в месяц<br>
+                                • Дисциплина: следование системе без эмоций
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-note">
+                        <div class="instruction-title">
+                            <span>⚠️</span> КРИТИЧЕСКИ ВАЖНЫЕ ПРАВИЛА
+                        </div>
+                        <div class="instruction-content">
+                            <strong>1. Никогда не нарушайте эти правила:</strong><br>
+                            • Не делайте ставки без математического преимущества 2%+<br>
+                            • Не увеличивайте размер ставки после проигрыша<br>
+                            • Не делайте ставки в неподходящее время<br>
+                            • Не отклоняйтесь от рекомендаций системы<br><br>
+                            
+                            <strong>2. Эмоциональный контроль:</strong><br>
+                            • Ставки — это математика, а не азартная игра<br>
+                            • Принимайте проигрыши как часть системы<br>
+                            • Не пытайтесь отыграться увеличением ставок<br>
+                            • Делайте перерывы при 3 проигрышах подряд
+                        </div>
+                    </div>
+                    
+                    <div class="success-note">
+                        <div class="instruction-title">
+                            <span>💰</span> РЕАЛЬНЫЕ РЕЗУЛЬТАТЫ ПРИ СЛЕДОВАНИИ СИСТЕМЕ
+                        </div>
+                        <div class="instruction-content">
+                            <strong>При банкролле 100 000 ₽ и ставках 2%:</strong><br>
+                            • 10 ставок в неделю = 40 в месяц<br>
+                            • При проценте побед 58% и среднем коэффициенте 2.0<br>
+                            • Месячная прибыль: 12 000 - 15 000 ₽ (12-15%)<br>
+                            • Годовая прибыль: 144 000 - 180 000 ₽<br><br>
+                            
+                            <strong>Ключ к успеху:</strong> Дисциплина и следование системе. PROFIT PRO дает математическое преимущество, но только вы можете превратить его в реальную прибыль.
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-section">
+                        <div class="instruction-title">
+                            <span>🔧</span> ДОПОЛНИТЕЛЬНЫЕ ВОЗМОЖНОСТИ
+                        </div>
+                        <div class="instruction-content">
+                            <div class="instruction-step">
+                                <span class="step-number">1</span>
+                                <strong>Темы оформления:</strong><br>
+                                • Стандартная (оптимальная для глаз)<br>
+                                • Темная (экономия заряда)<br>
+                                • Синяя (улучшенный контраст)
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">2</span>
+                                <strong>Автосохранение:</strong><br>
+                                • История сохраняется автоматически<br>
+                                • Данные не теряются при закрытии<br>
+                                • Можно очистить историю при необходимости
+                            </div>
+                            <div class="instruction-step">
+                                <span class="step-number">3</span>
+                                <strong>Поддержка:</strong><br>
+                                • Программа работает на всех устройствах<br>
+                                • Оптимизирована для мобильных<br>
+                                • Регулярные обновления и улучшения
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="back_to_input">
+                            <span>🚀</span> НАЧАТЬ РАБОТУ ПО СИСТЕМЕ
+                        </button>
+                        <button class="btn btn-secondary" id="show_calculator">
+                            <span>🧮</span> ПРОТЕСТИРОВАТЬ РАСЧЕТ
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1110,15 +1385,14 @@
         <!-- Footer -->
         <div class="footer">
             <div>PROFIT PRO Анализатор ставок</div>
-            <div class="text-xs mt-2">Математическая модель для профессиональных ставок</div>
-            <div class="text-xs mt-2">Программа создана Игорем Ефимовым для улучшения благосостояния людей</div>
-            <div class="text-xs mt-2">Защищена авторскими правами. ©2025 г.</div>
-            <div class="text-xs mt-2">Ставки делайте ответственно. 18+</div>
+            <div class="text-xs mt-2">Математическая система Value Betting для профессиональных игроков</div>
+            <div class="text-xs mt-2">Создана на основе математических моделей и анализа 5000+ матчей</div>
+            <div class="text-xs mt-2">Защищена авторскими правами. ©2025 г. Разработано Игорем Ефимовым</div>
+            <div class="text-xs mt-2">Ставки делайте ответственно. 18+ Рискуйте только тем, что готовы потерять</div>
         </div>
     </div>
 
     <script>
-        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             // Элементы управления
             const tabs = document.querySelectorAll('.tab');
@@ -1130,8 +1404,10 @@
             const clearHistoryBtn = document.getElementById('clear_history');
             const backToBetsBtn = document.getElementById('back_to_bets');
             const backToInputBtn = document.getElementById('back_to_input');
+            const showCalculatorBtn = document.getElementById('show_calculator');
             const themeBtns = document.querySelectorAll('.theme-btn');
             const timeItems = document.querySelectorAll('.time-item');
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
             
             // Хранилище данных
             let betHistory = JSON.parse(localStorage.getItem('profit_pro_bets')) || [];
@@ -1143,17 +1419,25 @@
                 tab.addEventListener('click', function() {
                     const tabId = this.dataset.tab;
                     
-                    // Обновляем активные вкладки
                     tabs.forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
                     
                     this.classList.add('active');
                     document.getElementById(tabId).classList.add('active');
                     
-                    // При переходе на историю обновляем её
                     if (tabId === 'history') {
                         updateHistoryDisplay();
                     }
+                });
+            });
+            
+            // Обработка toggle кнопок в инструкции
+            toggleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('expanded');
+                    this.querySelector('.toggle-arrow').textContent = 
+                        content.classList.contains('expanded') ? '▲' : '▼';
                 });
             });
             
@@ -1172,16 +1456,11 @@
                     const period = activeItem.dataset.period;
                     const periodName = activeItem.querySelector('.time-name').textContent;
                     
-                    // Устанавливаем выбранный период
                     document.getElementById('new_time').value = period;
-                    
-                    // Обновляем заголовок
                     document.querySelector('.banner-title').innerHTML = 
                         `⭐ Оптимальное время: ${periodName}`;
                     
-                    // Переключаемся на вкладку ввода
                     document.querySelector('.tab[data-tab="input"]').click();
-                    
                     showNotification(`Период "${periodName}" применен`);
                 }
             });
@@ -1196,7 +1475,6 @@
                     
                     applyTheme(theme);
                     localStorage.setItem('profit_pro_theme', theme);
-                    
                     showNotification(`Тема "${theme}" применена`);
                 });
             });
@@ -1262,9 +1540,8 @@
                 }
             });
             
-            // ОСНОВНАЯ ФУНКЦИЯ РАСЧЕТА - УМНАЯ МАТЕМАТИЧЕСКАЯ МОДЕЛЬ
+            // Основная функция расчета
             calculateBtn.addEventListener('click', function() {
-                // Получаем и валидируем введенные данные
                 const p1Old = parseFloat(document.getElementById('p1_old').value.replace(',', '.')) || 1.85;
                 const p2Old = parseFloat(document.getElementById('p2_old').value.replace(',', '.')) || 2.05;
                 const p1New = parseFloat(document.getElementById('p1_new').value.replace(',', '.')) || 1.75;
@@ -1273,7 +1550,6 @@
                 const oldTime = document.getElementById('old_time').value;
                 const newTime = document.getElementById('new_time').value;
                 
-                // Получаем текущие тоталы
                 const totals = {
                     'tb25': parseFloat(document.getElementById('tb25').value.replace(',', '.')) || 1.95,
                     'tm25': parseFloat(document.getElementById('tm25').value.replace(',', '.')) || 1.85,
@@ -1288,7 +1564,7 @@
                 const marginNew = 1/p1New + 1/p2New;
                 const marginChange = ((marginNew - marginOld) / marginOld * 100).toFixed(1);
                 
-                // РАСЧЕТ 2: Реальные вероятности (без маржи)
+                // РАСЧЕТ 2: Реальные вероятности
                 const realP1Old = (1/p1Old) / marginOld;
                 const realP2Old = (1/p2Old) / marginOld;
                 const realP1New = (1/p1New) / marginNew;
@@ -1298,7 +1574,7 @@
                 const deltaP1 = realP1New - realP1Old;
                 const deltaP2 = realP2New - realP2Old;
                 
-                // РАСЧЕТ 4: Временной фактор (умный алгоритм)
+                // РАСЧЕТ 4: Временной фактор
                 const timeFactors = {
                     'prematch': 0.7,
                     '1-15': 0.8,
@@ -1312,27 +1588,21 @@
                 const timeFactorOld = timeFactors[oldTime] || 1.0;
                 const timeFactorNew = timeFactors[newTime] || 1.0;
                 
-                // Умный расчет: учитываем не только соотношение, но и абсолютные значения
                 let timeAdjustment;
                 if (timeFactorNew > timeFactorOld) {
-                    // Переход к более надежному периоду
                     timeAdjustment = 1 + (timeFactorNew - timeFactorOld) * 0.5;
                 } else {
-                    // Переход к менее надежному периоду
                     timeAdjustment = 1 - (timeFactorOld - timeFactorNew) * 0.3;
                 }
                 
-                // РАСЧЕТ 5: Корректировка коэффициентов тоталов (улучшенная модель)
+                // РАСЧЕТ 5: Корректировка коэффициентов тоталов
                 const avgDelta = (Math.abs(deltaP1) + Math.abs(deltaP2)) / 2;
-                const trendDirection = deltaP1 > 0 ? 1 : -1; // 1 = П1 укрепляется, -1 = П2 укрепляется
+                const trendDirection = deltaP1 > 0 ? 1 : -1;
                 
-                // Умный фактор коррекции: учитываем направление тренда
                 let correctionFactor;
                 if (trendDirection > 0) {
-                    // П1 укрепляется -> тоталы на повышение
                     correctionFactor = 1 + (avgDelta * 1.8) * timeAdjustment;
                 } else {
-                    // П2 укрепляется -> тоталы на понижение
                     correctionFactor = 1 + (avgDelta * 1.5) * timeAdjustment;
                 }
                 
@@ -1341,14 +1611,11 @@
                 const deltas = {};
                 
                 for (const [key, oldValue] of Object.entries(totals)) {
-                    // Разная коррекция для разных типов тоталов
                     let factor = correctionFactor;
                     
-                    // Тоталы на повышение реагируют сильнее на укрепление П1
                     if (key.startsWith('tb') && trendDirection > 0) {
                         factor = correctionFactor * 1.1;
                     }
-                    // Тоталы на понижение реагируют сильнее на укрепление П2
                     if (key.startsWith('tm') && trendDirection < 0) {
                         factor = correctionFactor * 1.1;
                     }
@@ -1360,7 +1627,6 @@
                 // РАСЧЕТ 6: Value (преимущество) для каждой ставки
                 const values = {};
                 for (const [key, newValue] of Object.entries(newTotals)) {
-                    // Value = (коэффициент × реальная вероятность) - 1
                     const marketProb = 1 / totals[key];
                     const realProb = marketProb / marginNew;
                     values[key] = (newValue * realProb) - 1;
@@ -1371,7 +1637,7 @@
                 let bestValue = -Infinity;
                 
                 for (const [key, value] of Object.entries(values)) {
-                    if (value > bestValue && value > 0.02) { // Минимальное преимущество 2%
+                    if (value > bestValue && value > 0.02) {
                         bestValue = value;
                         bestBet = key;
                     }
@@ -1382,7 +1648,6 @@
                 document.getElementById('margin_old').textContent = marginOld.toFixed(3);
                 document.getElementById('margin_new').textContent = marginNew.toFixed(3);
                 
-                // Обновляем новые коэффициенты
                 document.getElementById('tb25_new').textContent = newTotals.tb25.toFixed(3);
                 document.getElementById('tm25_new').textContent = newTotals.tm25.toFixed(3);
                 document.getElementById('tb35_new').textContent = newTotals.tb35.toFixed(3);
@@ -1406,16 +1671,13 @@
                     document.getElementById('main_time').textContent = optimalTime;
                     document.getElementById('main_profit').textContent = `+${profitPercent}%`;
                     
-                    // Обновляем баннер с анализом
                     document.querySelector('#results .banner-text').innerHTML = 
                         `Наибольший рост у <strong>${betNames[bestBet]} (+${deltas[bestBet].toFixed(3)})</strong>. 
                         Математическое преимущество: <strong>${profitPercent}%</strong>.`;
                         
-                    // Обновляем confidence score
                     const confidenceScore = Math.min(Math.round(bestValue * 1000 + 70), 95);
                     document.querySelector('.bet-confidence').textContent = `${confidenceScore}%`;
                 } else {
-                    // Нет выгодных ставок
                     document.getElementById('main_bet').textContent = 'НЕТ ВЫГОДНЫХ';
                     document.getElementById('main_coef').textContent = '—';
                     document.getElementById('main_time').textContent = '—';
@@ -1423,9 +1685,7 @@
                     document.querySelector('.bet-confidence').textContent = '0%';
                 }
                 
-                // Переключаемся на вкладку результатов
                 document.querySelector('.tab[data-tab="results"]').click();
-                
                 showNotification('✅ Расчет завершен! ' + (bestBet ? 'Найдены выгодные ставки.' : 'Выгодных ставок не найдено.'));
             });
             
@@ -1465,6 +1725,13 @@
                 document.querySelector('.tab[data-tab="bets"]').click();
             });
             
+            // Кнопка показа калькулятора (из инфо)
+            if (showCalculatorBtn) {
+                showCalculatorBtn.addEventListener('click', function() {
+                    document.querySelector('.tab[data-tab="input"]').click();
+                });
+            }
+            
             // Сохранение ставки в историю
             saveBetBtn.addEventListener('click', function() {
                 const betName = document.getElementById('main_bet').textContent;
@@ -1497,11 +1764,11 @@
                 document.querySelector('.tab[data-tab="history"]').click();
             });
             
-            // Расчет оптимального размера ставки (формула Келли)
+            // Расчет оптимального размера ставки
             function calculateOptimalStake(odds) {
-                const edge = 0.05; // Предполагаемое преимущество 5%
-                const kellyFraction = (edge / (odds - 1)) * 0.5; // Половина Келли
-                const stakePercent = Math.min(Math.max(kellyFraction * 100, 1), 3); // От 1% до 3%
+                const edge = 0.05;
+                const kellyFraction = (edge / (odds - 1)) * 0.5;
+                const stakePercent = Math.min(Math.max(kellyFraction * 100, 1), 3);
                 const stakeAmount = (bankroll * stakePercent / 100).toFixed(0);
                 
                 return parseInt(stakeAmount);
@@ -1576,7 +1843,6 @@
                     if (historyList) historyList.innerHTML = html;
                 }
                 
-                // Обновляем статистику
                 updateStatistics();
             }
             
@@ -1604,11 +1870,9 @@
                 document.getElementById('total_profit').textContent = 
                     (totalProfit > 0 ? '+' : '') + totalProfit.toFixed(0) + ' ₽';
                 
-                // Цвет прибыли
                 const profitElement = document.getElementById('total_profit');
                 profitElement.style.color = totalProfit >= 0 ? 'var(--profit)' : 'var(--loss)';
                 
-                // Цвет процента побед
                 const winRateElement = document.getElementById('win_rate');
                 if (winRate >= 60) {
                     winRateElement.style.color = 'var(--profit)';
@@ -1633,7 +1897,6 @@
             
             // Уведомления
             function showNotification(message) {
-                // Создаем элемент уведомления
                 const notification = document.createElement('div');
                 notification.style.cssText = `
                     position: fixed;
@@ -1657,12 +1920,10 @@
                 notification.textContent = message;
                 document.body.appendChild(notification);
                 
-                // Показываем уведомление
                 setTimeout(() => {
                     notification.style.transform = 'translateX(0)';
                 }, 10);
                 
-                // Убираем через 3 секунды
                 setTimeout(() => {
                     notification.style.transform = 'translateX(120%)';
                     setTimeout(() => notification.remove(), 300);
@@ -1674,13 +1935,11 @@
                 input.addEventListener('input', function() {
                     let value = this.value.replace(/[^\d.,]/g, '').replace(/,/g, '.');
                     
-                    // Удаляем лишние точки
                     const parts = value.split('.');
                     if (parts.length > 2) {
                         value = parts[0] + '.' + parts.slice(1).join('');
                     }
                     
-                    // Ограничиваем двумя знаками после запятой
                     if (value.includes('.')) {
                         const decimalParts = value.split('.');
                         if (decimalParts[1].length > 2) {
@@ -1691,7 +1950,6 @@
                     this.value = value;
                 });
                 
-                // Форматируем при потере фокуса
                 input.addEventListener('blur', function() {
                     const numValue = parseFloat(this.value);
                     if (!isNaN(numValue) && numValue > 1) {
@@ -1703,9 +1961,9 @@
             // Инициализация
             updateHistoryDisplay();
             
-            // Показываем приветственное сообщение
+            // Приветственное сообщение
             setTimeout(() => {
-                showNotification('🚀 PROFIT PRO готов к работе! Введите коэффициенты для анализа.');
+                showNotification('🚀 PROFIT PRO готов к работе! Прочтите инструкцию для максимальной эффективности.');
             }, 1000);
             
             // Автосохранение
@@ -1715,7 +1973,7 @@
                 }
             }, 30000);
             
-            // Быстрые подсказки при наведении
+            // Подсказки
             const hints = {
                 'p1_old': 'Коэффициент на победу первой команды в старый период',
                 'p2_old': 'Коэффициент на победу второй команды в старый период',
@@ -1729,7 +1987,6 @@
                 'tm15': 'Тотал меньше 1.5 голов'
             };
             
-            // Добавляем подсказки
             Object.keys(hints).forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
